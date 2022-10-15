@@ -74,6 +74,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   number: {fileID: 757302188783568174}
+  plantSprites:
+  - {fileID: 21300000, guid: 96e53f1a882d14e34a64770fb2ad2bb6, type: 3}
+  - {fileID: 21300000, guid: e8911aaf5f4fa49e59733f34e57e38ea, type: 3}
+  - {fileID: 21300000, guid: 03223ba3a22c14e1ebf70f58bb1cd12a, type: 3}
 --- !u!212 &930842464
 SpriteRenderer:
   m_ObjectHideFlags: 0

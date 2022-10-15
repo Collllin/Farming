@@ -12,14 +12,17 @@ public enum CellState
 public class BasicCell : MonoBehaviour
 {
     public Number number;
+    public Sprite[] plantSprites;
 
     private CellState cellState = CellState.Empty;
     private bool countingDown = false;
+    private SpriteRenderer spriteRenderer;
 
     // Start is called before the first frame update
     void Start()
     {
-        number.SetColor(NumberColor.Yellow);
+        number.SetColor(NumberColor.Red);
+        spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
     // Update is called once per frame
@@ -46,6 +49,7 @@ public class BasicCell : MonoBehaviour
         cellState = CellState.Empty;
         countingDown = false;
         number.Clear();
+        spriteRenderer.sprite = null;
     }
 
     private IEnumerator Countdown(Character character)
@@ -58,17 +62,28 @@ public class BasicCell : MonoBehaviour
                 {
                     shouldCountdown = false;
                 }
+                else
+                {
+                    spriteRenderer.sprite = plantSprites[0];
+                }
                 break;
             case CellState.Seeded:
                 if (!character.WaterPlant())
                 {
                     shouldCountdown = false;
                 }
+                else
+                {
+                    spriteRenderer.sprite = plantSprites[1];
+                }
                 break;
             case CellState.Mature:
-                character.Harvest();
+                if (character.Harvest())
+                {
+                    spriteRenderer.sprite = null;
+                    cellState = CellState.Empty;
+                }
                 shouldCountdown = false;
-                cellState = CellState.Empty;
                 break;
         }
 
@@ -94,6 +109,7 @@ public class BasicCell : MonoBehaviour
                     break;
                 case CellState.Seeded:
                     cellState = CellState.Mature;
+                    spriteRenderer.sprite = plantSprites[2];
                     break;
                 case CellState.Mature:
                     break;
