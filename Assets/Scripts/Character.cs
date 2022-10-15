@@ -186,4 +186,24 @@ public class Character : MonoBehaviour
         plantNum.text = "0";
         return storedNum;
     }
+
+    public void IncreaseMoveSpeed()
+    {
+        moveSpeed *= 1.1f;
+    }
+
+    public void IncreasePlantBag()
+    {
+        plantLimitation += 10;
+    }
+
+    public void IncreaseSeedBag()
+    {
+        seedLimitation += 5;
+    }
+
+    public void IncreaseWaterBag()
+    {
+        waterLimitation += 5;
+    }
 }

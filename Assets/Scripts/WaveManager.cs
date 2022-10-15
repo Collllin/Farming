@@ -8,6 +8,7 @@ using TMPro;
 public class WaveManager : MonoBehaviour
 {
     static private float kWaveTime = 60f;
+    private static int kUpgradePrice = 30;
 
     public Action gameOverAction;
     public Image progress;
@@ -92,6 +93,28 @@ public class WaveManager : MonoBehaviour
         coins.ShowNumber(coinNum);
 
         StartCoroutine(Countdown());
+    }
+
+    public bool TryPurchase()
+    {
+        if (coinNum >= kUpgradePrice)
+        {
+            coinNum -= kUpgradePrice;
+            coins.ShowNumber(coinNum);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public void IncreaseFarmSpeed()
+    {
+        foreach (var cell in cells)
+        {
+            cell.IncreaseFarmSpeed();
+        }
     }
 
     private IEnumerator Countdown()

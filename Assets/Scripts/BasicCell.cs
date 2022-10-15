@@ -19,6 +19,7 @@ public class BasicCell : MonoBehaviour
     private bool countingDown = false;
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
+    private float farmingSecond = 5f;
 
     // Start is called before the first frame update
     void Start()
@@ -41,7 +42,7 @@ public class BasicCell : MonoBehaviour
             Character character = collision.gameObject.GetComponent<Character>();
             if (character != null)
             {
-                StartCoroutine(Countdown(character));
+                StartCoroutine(Countdown(character, farmingSecond));
             }
         }
     }
@@ -55,7 +56,12 @@ public class BasicCell : MonoBehaviour
         spriteRenderer.sprite = null;
     }
 
-    private IEnumerator Countdown(Character character)
+    public void IncreaseFarmSpeed()
+    {
+        farmingSecond *= 0.95f;
+    }
+
+    private IEnumerator Countdown(Character character, float seconds)
     {
         bool shouldCountdown = true;
         switch (cellState)
@@ -100,16 +106,19 @@ public class BasicCell : MonoBehaviour
         {
             countingDown = true;
 
-            number.ShowNumber(5);
-            yield return new WaitForSeconds(1);
-            number.ShowNumber(4);
-            yield return new WaitForSeconds(1);
-            number.ShowNumber(3);
-            yield return new WaitForSeconds(1);
-            number.ShowNumber(2);
-            yield return new WaitForSeconds(1);
-            number.ShowNumber(1);
-            yield return new WaitForSeconds(1);
+            int integerSeconds = (int)seconds;
+            float tmpSeconds = seconds - integerSeconds;
+
+            number.ShowNumber(integerSeconds);
+            yield return new WaitForSeconds(tmpSeconds);
+
+            while (integerSeconds > 0)
+            {
+                number.ShowNumber(integerSeconds);
+                yield return new WaitForSeconds(1);
+                integerSeconds--;
+            }
+
             number.Clear();
             switch (cellState)
             {
