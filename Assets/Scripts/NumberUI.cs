@@ -1,31 +1,37 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class Number : MonoBehaviour
+public class NumberUI : MonoBehaviour
 {
     public Sprite[] redNumbers;
     public Sprite[] yellowNumbers;
 
     private Sprite[] currentNumber;
-    private SpriteRenderer spriteRenderer;
+    private Image image;
+
+    private void Awake()
+    {
+        currentNumber = yellowNumbers;
+        image = GetComponent<Image>();
+    }
 
     // Start is called before the first frame update
     void Start()
     {
-        currentNumber = yellowNumbers;
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void Clear()
     {
-        spriteRenderer.sprite = null;
+        image.sprite = null;
     }
 
     public void SetColor(NumberColor numberColor)
@@ -43,6 +49,6 @@ public class Number : MonoBehaviour
 
     public void ShowNumber(int number)
     {
-        spriteRenderer.sprite = currentNumber[number];
+        image.sprite = currentNumber[number];
     }
 }

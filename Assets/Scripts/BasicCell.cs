@@ -11,7 +11,7 @@ public enum CellState
 
 public class BasicCell : MonoBehaviour
 {
-    public Number number;
+    public NumberManager number;
     public Sprite[] plantSprites;
 
     private CellState cellState = CellState.Empty;
