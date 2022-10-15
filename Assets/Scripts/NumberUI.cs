@@ -31,7 +31,7 @@ public class NumberUI : MonoBehaviour
 
     public void Clear()
     {
-        image.sprite = null;
+        image.color = new Color(image.color.r, image.color.g, image.color.b, 0);
     }
 
     public void SetColor(NumberColor numberColor)
@@ -49,6 +49,7 @@ public class NumberUI : MonoBehaviour
 
     public void ShowNumber(int number)
     {
+        image.color = new Color(image.color.r, image.color.g, image.color.b, 1);
         image.sprite = currentNumber[number];
     }
 }

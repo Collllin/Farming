@@ -9,13 +9,18 @@ public class NumberUIManager : MonoBehaviour
     private List<NumberUI> numbers = new();
     private NumberColor numberColor = NumberColor.Red;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
         GameObject numberObj = Instantiate(numberPrefab, transform);
         NumberUI number = numberObj.GetComponent<NumberUI>();
         number.SetColor(numberColor);
         numbers.Add(number);
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame

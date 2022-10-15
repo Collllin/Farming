@@ -11,9 +11,10 @@ public class WaveManager : MonoBehaviour
 
     public Action gameOverAction;
     public Image progress;
-    public Image monthNum;
+    public NumberUIManager monthNum;
     public Character character;
-    public TextMeshProUGUI storedNumText;
+    public NumberUIManager storedNumText;
+    public NumberUIManager goalNumText;
     public CommonInteraction seedTrigger;
     public CommonInteraction storeTrigger;
     public CommonInteraction waterTrigger;
@@ -25,15 +26,24 @@ public class WaveManager : MonoBehaviour
 
     private BasicCell[] cells;
     private Vector3 originalPosition;
-    private int waves = 0;
+    private int months = 0;
     private int storedNum = 0;
     private int coinNum = 0;
+    private int goalNum = 10;
 
     // Start is called before the first frame update
     void Start()
     {
         cells = cellsContainer.GetComponentsInChildren<BasicCell>();
+
+        coins.SetColor(NumberColor.Yellow);
         coins.ShowNumber(coinNum);
+        monthNum.SetColor(NumberColor.Yellow);
+        monthNum.ShowNumber(months);
+        storedNumText.SetColor(NumberColor.Red);
+        storedNumText.ShowNumber(storedNum);
+        goalNumText.SetColor(NumberColor.Red);
+        goalNumText.ShowNumber(goalNum);
 
         originalPosition = character.transform.position;
         seedTrigger.interactedAction = () =>
@@ -43,7 +53,7 @@ public class WaveManager : MonoBehaviour
         storeTrigger.interactedAction = () =>
         {
             storedNum += character.StorePlant();
-            storedNumText.text = storedNum.ToString();
+            storedNumText.ShowNumber(storedNum);
         };
         waterTrigger.interactedAction = () =>
         {
@@ -65,9 +75,12 @@ public class WaveManager : MonoBehaviour
     public void StartGame()
     {
         storedNum = 0;
-        storedNumText.text = "0";
+        storedNumText.ShowNumber(storedNum);
+        goalNum = 10;
+        goalNumText.ShowNumber(goalNum);
         progress.fillAmount = 0;
-        monthNum.sprite = nums[0];
+        months = 0;
+        monthNum.ShowNumber(months);
         character.transform.position = originalPosition;
         character.ableToMove = true;
         character.Reset();
@@ -90,7 +103,24 @@ public class WaveManager : MonoBehaviour
             progress.fillAmount += deltaAmount * Time.deltaTime;
         }
 
-        character.ableToMove = false;
-        gameOverAction?.Invoke();
+        if (storedNum < goalNum)
+        {
+            character.ableToMove = false;
+            gameOverAction?.Invoke();
+        }
+        else
+        {
+            storedNum = 0;
+            storedNumText.ShowNumber(storedNum);
+
+            months++;
+            monthNum.ShowNumber(months);
+
+            goalNum += months * 10;
+            goalNumText.ShowNumber(goalNum);
+
+            progress.fillAmount = 0;
+            StartCoroutine(Countdown());
+        }
     }
 }
