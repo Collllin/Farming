@@ -20,14 +20,14 @@ public class WaveManager : MonoBehaviour
 
     public Sprite[] nums;
 
-    private Transform originalTransform;
+    private Vector3 originalPosition;
     private int waves = 0;
     private int storedNum = 0;
 
     // Start is called before the first frame update
     void Start()
     {
-        originalTransform = character.transform;
+        originalPosition = character.transform.position;
         seedTrigger.interactedAction = () =>
         {
             character.TakeSeed();
@@ -55,7 +55,7 @@ public class WaveManager : MonoBehaviour
         storedNumText.text = "0";
         progress.fillAmount = 0;
         monthNum.sprite = nums[0];
-        character.transform.localPosition = originalTransform.localPosition;
+        character.transform.position = originalPosition;
         character.ableToMove = true;
         character.Reset();
 

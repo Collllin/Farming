@@ -45,6 +45,7 @@ public class Character : MonoBehaviour
 
         if (!ableToMove)
         {
+            rBody.velocity = Vector2.zero;
             return;
         }
 
