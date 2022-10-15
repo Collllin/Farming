@@ -17,9 +17,11 @@ public class WaveManager : MonoBehaviour
     public CommonInteraction seedTrigger;
     public CommonInteraction storeTrigger;
     public CommonInteraction waterTrigger;
+    public GameObject cellsContainer;
 
     public Sprite[] nums;
 
+    private BasicCell[] cells;
     private Vector3 originalPosition;
     private int waves = 0;
     private int storedNum = 0;
@@ -27,6 +29,8 @@ public class WaveManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        cells = cellsContainer.GetComponentsInChildren<BasicCell>();
+
         originalPosition = character.transform.position;
         seedTrigger.interactedAction = () =>
         {
@@ -58,6 +62,10 @@ public class WaveManager : MonoBehaviour
         character.transform.position = originalPosition;
         character.ableToMove = true;
         character.Reset();
+        foreach (var cell in cells)
+        {
+            cell.Reset();
+        }
 
         StartCoroutine(Countdown());
     }

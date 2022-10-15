@@ -42,6 +42,14 @@ public class BasicCell : MonoBehaviour
         }
     }
 
+    public void Reset()
+    {
+        StopAllCoroutines();
+        cellState = CellState.Empty;
+        countingDown = false;
+        spriteRenderer.sprite = null;
+    }
+
     private IEnumerator Countdown(Character character)
     {
         bool shouldCountdown = true;
