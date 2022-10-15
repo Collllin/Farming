@@ -11,9 +11,7 @@ public enum CellState
 
 public class BasicCell : MonoBehaviour
 {
-    public Sprite[] numbers;
-
-    private SpriteRenderer spriteRenderer;
+    public Number number;
 
     private CellState cellState = CellState.Empty;
     private bool countingDown = false;
@@ -21,7 +19,7 @@ public class BasicCell : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        spriteRenderer = gameObject.GetComponent<SpriteRenderer>();
+        number.SetColor(NumberColor.Yellow);
     }
 
     // Update is called once per frame
@@ -47,7 +45,7 @@ public class BasicCell : MonoBehaviour
         StopAllCoroutines();
         cellState = CellState.Empty;
         countingDown = false;
-        spriteRenderer.sprite = null;
+        number.Clear();
     }
 
     private IEnumerator Countdown(Character character)
@@ -78,18 +76,17 @@ public class BasicCell : MonoBehaviour
         {
             countingDown = true;
 
-            spriteRenderer.sprite = numbers[5];
+            number.ShowNumber(5);
             yield return new WaitForSeconds(1);
-            spriteRenderer.sprite = numbers[4];
+            number.ShowNumber(4);
             yield return new WaitForSeconds(1);
-            spriteRenderer.sprite = numbers[3];
+            number.ShowNumber(3);
             yield return new WaitForSeconds(1);
-            spriteRenderer.sprite = numbers[2];
+            number.ShowNumber(2);
             yield return new WaitForSeconds(1);
-            spriteRenderer.sprite = numbers[1];
+            number.ShowNumber(1);
             yield return new WaitForSeconds(1);
-            spriteRenderer.sprite = null;
-
+            number.Clear();
             switch (cellState)
             {
                 case CellState.Empty:
