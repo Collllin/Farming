@@ -8,7 +8,7 @@ public class Character : MonoBehaviour
 {
     public Action<Transform> characterPosChanged;
 
-    public float moveSpeed = 1;
+    public float moveSpeed = 10;
     [HideInInspector]
     public bool ableToMove = false;
 
@@ -123,6 +123,10 @@ public class Character : MonoBehaviour
         waterNum.text = "0";
         plantAmount = 0;
         plantNum.text = "0";
+        moveSpeed = 10f;
+        plantLimitation = 15;
+        seedLimitation = 10;
+        waterLimitation = 10;
     }
 
     public void TakeSeed()
@@ -189,21 +193,21 @@ public class Character : MonoBehaviour
 
     public void IncreaseMoveSpeed()
     {
-        moveSpeed *= 1.1f;
+        moveSpeed *= 1.15f;
     }
 
     public void IncreasePlantBag()
     {
-        plantLimitation += 10;
+        plantLimitation += 15;
     }
 
     public void IncreaseSeedBag()
     {
-        seedLimitation += 5;
+        seedLimitation += 10;
     }
 
     public void IncreaseWaterBag()
     {
-        waterLimitation += 5;
+        waterLimitation += 10;
     }
 }

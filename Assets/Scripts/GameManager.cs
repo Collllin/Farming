@@ -5,7 +5,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     public CommonButton startButton;
-    public GameObject tutorialWindow;
+    public GameObject UIOutsideGame;
     public WaveManager waveManager;
     public GameObject UIInGame;
 
@@ -17,7 +17,7 @@ public class GameManager : MonoBehaviour
         startButton.buttonClickAction = () =>
         {
             startButton.gameObject.SetActive(false);
-            tutorialWindow.SetActive(false);
+            UIOutsideGame.SetActive(false);
             UIInGame.SetActive(true);
             waveManager.StartGame();
         };
@@ -25,7 +25,7 @@ public class GameManager : MonoBehaviour
         waveManager.gameOverAction = () =>
         {
             startButton.gameObject.SetActive(true);
-            tutorialWindow.SetActive(true);
+            UIOutsideGame.SetActive(true);
             UIInGame.SetActive(false);
         };
     }

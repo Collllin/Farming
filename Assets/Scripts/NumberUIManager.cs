@@ -68,6 +68,7 @@ public class NumberUIManager : MonoBehaviour
             {
                 Vector3 newPos = new Vector3(numbers[index - 1].transform.position.x - 30, numbers[index - 1].transform.position.y, numbers[index - 1].transform.position.z);
                 GameObject numberObj = Instantiate(numberPrefab, newPos, numbers[index - 1].transform.rotation, transform);
+
                 NumberUI num = numberObj.GetComponent<NumberUI>();
                 num.SetColor(numberColor);
                 numbers.Add(num);

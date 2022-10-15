@@ -82,7 +82,7 @@ MonoBehaviour:
   actionSounds:
   - {fileID: 8300000, guid: 69e0e09f7884a4489b94606faa9c1e47, type: 3}
   - {fileID: 8300000, guid: 9e72c667bcbfb4bd3aea48b6bfc10870, type: 3}
-  - {fileID: 8300000, guid: b89c7d4022e0e4a19b7f6de81562c9d3, type: 3}
+  - {fileID: 8300000, guid: 4802000645b634bf9b861b4f18f01c0c, type: 3}
 --- !u!212 &930842464
 SpriteRenderer:
   m_ObjectHideFlags: 0

@@ -54,11 +54,12 @@ public class BasicCell : MonoBehaviour
         countingDown = false;
         number.Clear();
         spriteRenderer.sprite = null;
+        farmingSecond = 5;
     }
 
     public void IncreaseFarmSpeed()
     {
-        farmingSecond *= 0.95f;
+        farmingSecond *= 0.9f;
     }
 
     private IEnumerator Countdown(Character character, float seconds)

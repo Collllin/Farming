@@ -8,11 +8,13 @@ using TMPro;
 public class WaveManager : MonoBehaviour
 {
     static private float kWaveTime = 60f;
-    private static int kUpgradePrice = 30;
+    private static int kUpgradePrice = 20;
 
     public Action gameOverAction;
     public Image progress;
     public NumberUIManager monthNum;
+    public GameObject bigMonth;
+    public NumberUIManager bigMonthNum;
     public Character character;
     public NumberUIManager storedNumText;
     public NumberUIManager goalNumText;
@@ -36,11 +38,14 @@ public class WaveManager : MonoBehaviour
     void Start()
     {
         cells = cellsContainer.GetComponentsInChildren<BasicCell>();
+        bigMonth.SetActive(false);
 
         coins.SetColor(NumberColor.Yellow);
         coins.ShowNumber(coinNum);
         monthNum.SetColor(NumberColor.Yellow);
         monthNum.ShowNumber(months);
+        bigMonthNum.SetColor(NumberColor.Yellow);
+        bigMonthNum.ShowNumber(months);
         storedNumText.SetColor(NumberColor.Red);
         storedNumText.ShowNumber(storedNum);
         goalNumText.SetColor(NumberColor.Red);
@@ -82,6 +87,7 @@ public class WaveManager : MonoBehaviour
         progress.fillAmount = 0;
         months = 0;
         monthNum.ShowNumber(months);
+        bigMonthNum.ShowNumber(months);
         character.transform.position = originalPosition;
         character.ableToMove = true;
         character.Reset();
@@ -92,6 +98,7 @@ public class WaveManager : MonoBehaviour
         coinNum = 0;
         coins.ShowNumber(coinNum);
 
+        StartCoroutine(ShowBigMonth());
         StartCoroutine(Countdown());
     }
 
@@ -138,6 +145,9 @@ public class WaveManager : MonoBehaviour
 
             months++;
             monthNum.ShowNumber(months);
+            bigMonthNum.ShowNumber(months);
+
+            StartCoroutine(ShowBigMonth());
 
             goalNum += months * 10;
             goalNumText.ShowNumber(goalNum);
@@ -145,5 +155,12 @@ public class WaveManager : MonoBehaviour
             progress.fillAmount = 0;
             StartCoroutine(Countdown());
         }
+    }
+
+    private IEnumerator ShowBigMonth()
+    {
+        bigMonth.SetActive(true);
+        yield return new WaitForSeconds(2);
+        bigMonth.SetActive(false);
     }
 }
