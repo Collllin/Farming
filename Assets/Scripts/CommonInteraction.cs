@@ -11,11 +11,13 @@ public class CommonInteraction : MonoBehaviour
     public SpriteRenderer indicator;
 
     private bool ableToInteract = false;
+    private AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
     {
         indicator.gameObject.SetActive(false);
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -26,6 +28,7 @@ public class CommonInteraction : MonoBehaviour
             if (Input.GetButtonDown("Interact"))
             {
                 indicator.color = Color.green;
+                audioSource.Play();
             }
             else if (Input.GetButtonUp("Interact"))
             {

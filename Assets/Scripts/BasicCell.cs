@@ -13,16 +13,19 @@ public class BasicCell : MonoBehaviour
 {
     public NumberManager number;
     public Sprite[] plantSprites;
+    public AudioClip[] actionSounds;
 
     private CellState cellState = CellState.Empty;
     private bool countingDown = false;
     private SpriteRenderer spriteRenderer;
+    private AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
     {
         number.SetColor(NumberColor.Red);
         spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     // Update is called once per frame
@@ -65,6 +68,8 @@ public class BasicCell : MonoBehaviour
                 else
                 {
                     spriteRenderer.sprite = plantSprites[0];
+                    audioSource.clip = actionSounds[0];
+                    audioSource.Play();
                 }
                 break;
             case CellState.Seeded:
@@ -75,12 +80,16 @@ public class BasicCell : MonoBehaviour
                 else
                 {
                     spriteRenderer.sprite = plantSprites[1];
+                    audioSource.clip = actionSounds[1];
+                    audioSource.Play();
                 }
                 break;
             case CellState.Mature:
                 if (character.Harvest())
                 {
                     spriteRenderer.sprite = null;
+                    audioSource.clip = actionSounds[2];
+                    audioSource.Play();
                     cellState = CellState.Empty;
                 }
                 shouldCountdown = false;
