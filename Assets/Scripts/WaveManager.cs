@@ -8,7 +8,7 @@ using TMPro;
 public class WaveManager : MonoBehaviour
 {
     private float kWaveTime = 60f;
-    private static int kUpgradePrice = 20;
+    private static readonly int kUpgradePrice = 20;
 
     public Action gameOverAction;
     public Image progress;
@@ -16,6 +16,7 @@ public class WaveManager : MonoBehaviour
     public GameObject bigMonth;
     public NumberUIManager bigMonthNum;
     public Character character;
+    public UpgradeManager upgradeManager;
     public NumberUIManager storedNumText;
     public NumberUIManager goalNumText;
     public CommonInteraction seedTrigger;
@@ -108,6 +109,7 @@ public class WaveManager : MonoBehaviour
         coinNum = 0;
         coins.ShowNumber(coinNum);
 
+        upgradeManager.GetFreeUpdate(false);
         StartCoroutine(ShowBigMonth());
         StartCoroutine(Countdown());
     }
@@ -167,16 +169,18 @@ public class WaveManager : MonoBehaviour
                 kWaveTime = 30;
                 audioSource.clip = backgroundMusic[1];
                 audioSource.Play();
+                upgradeManager.GetFreeUpdate(true);
             }
             else
             {
                 goalNum = lastGoalNum;
-                goalNum += months * 10;
+                goalNum += 20;
                 lastGoalNum = goalNum;
                 goalNumText.ShowNumber(goalNum);
                 kWaveTime = 60;
                 audioSource.clip = backgroundMusic[0];
                 audioSource.Play();
+                upgradeManager.GetFreeUpdate(false);
             }
 
             progress.fillAmount = 0;

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public enum UpgradeType
 {
@@ -18,6 +19,7 @@ public class UpgradeManager : MonoBehaviour
     public CommonInteraction[] upgradeTriggers;
     public SpriteRenderer[] upgradeImages;
     public Sprite[] upgradeSprites;
+    public Image freeUpgradeImage;
 
     private UpgradeType[] upgradeTypes = { UpgradeType.PlantBag, UpgradeType.SeedBag, UpgradeType.WaterBag };
 
@@ -39,24 +41,7 @@ public class UpgradeManager : MonoBehaviour
                     return false;
                 }
 
-                switch (upgradeTypes[tmpIndex])
-                {
-                    case UpgradeType.FarmSpeed:
-                        waveManager.IncreaseFarmSpeed();
-                        break;
-                    case UpgradeType.MoveSpeed:
-                        character.IncreaseMoveSpeed();
-                        break;
-                    case UpgradeType.PlantBag:
-                        character.IncreasePlantBag();
-                        break;
-                    case UpgradeType.SeedBag:
-                        character.IncreaseSeedBag();
-                        break;
-                    case UpgradeType.WaterBag:
-                        character.IncreaseWaterBag();
-                        break;
-                }
+                Upgrade(upgradeTypes[tmpIndex]);
 
                 upgradeTypes[tmpIndex] = (UpgradeType)999;
                 RefreshUpgrade(tmpIndex);
@@ -70,6 +55,45 @@ public class UpgradeManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    public void GetFreeUpdate(bool real)
+    {
+        if (real)
+        {
+            int tmpIndex = Random.Range(0, 5);
+            Upgrade((UpgradeType)tmpIndex);
+            freeUpgradeImage.color = new Color(freeUpgradeImage.color.r, freeUpgradeImage.color.g, freeUpgradeImage.color.b, 1);
+            freeUpgradeImage.sprite = upgradeSprites[tmpIndex];
+            AudioSource audio = freeUpgradeImage.GetComponent<AudioSource>();
+            audio.Play();
+        }
+        else
+        {
+            freeUpgradeImage.color = new Color(freeUpgradeImage.color.r, freeUpgradeImage.color.g, freeUpgradeImage.color.b, 0);
+        }
+    }
+
+    private void Upgrade(UpgradeType type)
+    {
+        switch (type)
+        {
+            case UpgradeType.FarmSpeed:
+                waveManager.IncreaseFarmSpeed();
+                break;
+            case UpgradeType.MoveSpeed:
+                character.IncreaseMoveSpeed();
+                break;
+            case UpgradeType.PlantBag:
+                character.IncreasePlantBag();
+                break;
+            case UpgradeType.SeedBag:
+                character.IncreaseSeedBag();
+                break;
+            case UpgradeType.WaterBag:
+                character.IncreaseWaterBag();
+                break;
+        }
     }
 
     private void RefreshUpgrade(int index)
