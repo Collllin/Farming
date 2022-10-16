@@ -6893,6 +6893,7 @@ MonoBehaviour:
   seedLimitationText: {fileID: 1495117624}
   waterLimitationText: {fileID: 2060204312}
   plantLimitationText: {fileID: 718608540}
+  farmRange: {fileID: 1695956634}
 --- !u!1 &1567953857
 GameObject:
   m_ObjectHideFlags: 0
