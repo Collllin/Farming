@@ -46,7 +46,7 @@ public class NumberUIManager : MonoBehaviour
         }
     }
 
-    public void ShowNumber(int number)
+    public void ShowNumber(int number, int gap = 30)
     {
         foreach (var num in numbers)
         {
@@ -66,7 +66,7 @@ public class NumberUIManager : MonoBehaviour
             int currentNum = tmpNumber % 10;
             if (numbers.Count <= index)
             {
-                Vector3 newPos = new Vector3(numbers[index - 1].transform.position.x - 30, numbers[index - 1].transform.position.y, numbers[index - 1].transform.position.z);
+                Vector3 newPos = new Vector3(numbers[index - 1].transform.position.x - gap, numbers[index - 1].transform.position.y, numbers[index - 1].transform.position.z);
                 GameObject numberObj = Instantiate(numberPrefab, newPos, numbers[index - 1].transform.rotation, transform);
 
                 NumberUI num = numberObj.GetComponent<NumberUI>();

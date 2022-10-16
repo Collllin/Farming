@@ -98,7 +98,6 @@ public class WaveManager : MonoBehaviour
         progress.fillAmount = 0;
         months = 0;
         monthNum.ShowNumber(months);
-        bigMonthNum.ShowNumber(months);
         character.transform.position = originalPosition;
         character.ableToMove = true;
         character.Reset();
@@ -157,7 +156,6 @@ public class WaveManager : MonoBehaviour
 
             months++;
             monthNum.ShowNumber(months);
-            bigMonthNum.ShowNumber(months);
 
             StartCoroutine(ShowBigMonth());
 
@@ -191,6 +189,7 @@ public class WaveManager : MonoBehaviour
     private IEnumerator ShowBigMonth()
     {
         bigMonth.SetActive(true);
+        bigMonthNum.ShowNumber(months, 130);
         yield return new WaitForSeconds(2);
         bigMonth.SetActive(false);
     }
