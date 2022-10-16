@@ -49,14 +49,21 @@ public class CommonInteraction : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        indicator.color = Color.white;
-        indicator.gameObject.SetActive(true);
-        ableToInteract = true;
+        if (collision.CompareTag("Player"))
+        {
+
+            indicator.color = Color.white;
+            indicator.gameObject.SetActive(true);
+            ableToInteract = true;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        indicator.gameObject.SetActive(false);
-        ableToInteract = false;
+        if (collision.CompareTag("Player"))
+        {
+            indicator.gameObject.SetActive(false);
+            ableToInteract = false;
+        }
     }
 }

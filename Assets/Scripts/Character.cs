@@ -18,6 +18,7 @@ public class Character : MonoBehaviour
     public TextMeshProUGUI seedLimitationText;
     public TextMeshProUGUI waterLimitationText;
     public TextMeshProUGUI plantLimitationText;
+    public Transform farmRange;
 
     private int seedLimitation = 10;
     private int waterLimitation = 10;
@@ -234,5 +235,12 @@ public class Character : MonoBehaviour
     {
         waterLimitation += 10;
         waterLimitationText.text = waterLimitation.ToString();
+    }
+
+    public void IncreaseFarmRange()
+    {
+        Vector3 scale = farmRange.localScale;
+        Vector3 newScale = new(scale.x * 1.1f, scale.y * 1.1f, scale.z);
+        farmRange.localScale = newScale;
     }
 }

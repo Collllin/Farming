@@ -37,9 +37,9 @@ public class BasicCell : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (!countingDown)
+        if (!countingDown && collision.CompareTag("Range"))
         {
-            Character character = collision.gameObject.GetComponent<Character>();
+            Character character = collision.GetComponentInParent<Character>();
             if (character != null)
             {
                 StartCoroutine(Countdown(character, farmingSecond));

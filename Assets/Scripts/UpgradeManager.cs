@@ -10,6 +10,7 @@ public enum UpgradeType
     WaterBag,
     MoveSpeed,
     FarmSpeed,
+    FarmRange,
 }
 
 public class UpgradeManager : MonoBehaviour
@@ -61,7 +62,7 @@ public class UpgradeManager : MonoBehaviour
     {
         if (real)
         {
-            int tmpIndex = Random.Range(0, 5);
+            int tmpIndex = Random.Range(0, 6);
             Upgrade((UpgradeType)tmpIndex);
             freeUpgradeImage.color = new Color(freeUpgradeImage.color.r, freeUpgradeImage.color.g, freeUpgradeImage.color.b, 1);
             freeUpgradeImage.sprite = upgradeSprites[tmpIndex];
@@ -93,6 +94,9 @@ public class UpgradeManager : MonoBehaviour
             case UpgradeType.WaterBag:
                 character.IncreaseWaterBag();
                 break;
+            case UpgradeType.FarmRange:
+                character.IncreaseFarmRange();
+                break;
         }
     }
 
@@ -103,7 +107,7 @@ public class UpgradeManager : MonoBehaviour
         while (!found)
         {
             found = true;
-            tmpIndex = Random.Range(0, 5);
+            tmpIndex = Random.Range(0, 6);
             foreach (var type in upgradeTypes)
             {
                 if ((int)type == tmpIndex)
