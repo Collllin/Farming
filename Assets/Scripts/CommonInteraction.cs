@@ -29,7 +29,7 @@ public class CommonInteraction : MonoBehaviour
         {
             if (Input.GetButtonDown("Interact"))
             {
-                indicator.color = Color.green;
+                indicator.color = Color.blue;
                 if (interactedAction())
                 {
                     audioSource.clip = audioClips[0];
@@ -42,14 +42,14 @@ public class CommonInteraction : MonoBehaviour
             }
             else if (Input.GetButtonUp("Interact"))
             {
-                indicator.color = Color.yellow;
+                indicator.color = Color.white;
             }
         }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        indicator.color = Color.yellow;
+        indicator.color = Color.white;
         indicator.gameObject.SetActive(true);
         ableToInteract = true;
     }
