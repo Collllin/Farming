@@ -32,11 +32,14 @@ public class Character : MonoBehaviour
 
     private float speed;
     private float vspeed;
+    private float originalScale;
 
     // Start is called before the first frame update
     void Start()
     {
         rBody = GetComponent<Rigidbody2D>();
+        Vector3 scale = farmRange.localScale;
+        originalScale = scale.x;
     }
 
     // Update is called once per frame
@@ -134,6 +137,9 @@ public class Character : MonoBehaviour
         seedLimitationText.text = seedLimitation.ToString();
         waterLimitation = 10;
         waterLimitationText.text = waterLimitation.ToString();
+
+        Vector3 newScale = new(originalScale, originalScale, 0);
+        farmRange.localScale = newScale;
     }
 
     public bool TakeSeed()
@@ -240,7 +246,7 @@ public class Character : MonoBehaviour
     public void IncreaseFarmRange()
     {
         Vector3 scale = farmRange.localScale;
-        Vector3 newScale = new(scale.x * 1.1f, scale.y * 1.1f, scale.z);
+        Vector3 newScale = new(scale.x * 1.15f, scale.y * 1.15f, scale.z);
         farmRange.localScale = newScale;
     }
 }

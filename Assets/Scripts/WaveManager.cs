@@ -166,7 +166,6 @@ public class WaveManager : MonoBehaviour
                 kWaveTime = 30;
                 audioSource.clip = backgroundMusic[1];
                 audioSource.Play();
-                upgradeManager.GetFreeUpdate(true);
             }
             else
             {
@@ -177,6 +176,14 @@ public class WaveManager : MonoBehaviour
                 kWaveTime = 60;
                 audioSource.clip = backgroundMusic[0];
                 audioSource.Play();
+            }
+
+            if (months % 3 == 2)
+            {
+                upgradeManager.GetFreeUpdate(true);
+            }
+            else
+            {
                 upgradeManager.GetFreeUpdate(false);
             }
 
