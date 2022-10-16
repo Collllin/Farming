@@ -44,7 +44,6 @@ public class UpgradeManager : MonoBehaviour
 
                 Upgrade(upgradeTypes[tmpIndex]);
 
-                upgradeTypes[tmpIndex] = (UpgradeType)999;
                 RefreshUpgrade(tmpIndex);
 
                 return true;
