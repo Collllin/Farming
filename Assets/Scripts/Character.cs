@@ -15,6 +15,9 @@ public class Character : MonoBehaviour
     public TextMeshProUGUI seedNum;
     public TextMeshProUGUI waterNum;
     public TextMeshProUGUI plantNum;
+    public TextMeshProUGUI seedLimitationText;
+    public TextMeshProUGUI waterLimitationText;
+    public TextMeshProUGUI plantLimitationText;
 
     private int seedLimitation = 10;
     private int waterLimitation = 10;
@@ -125,8 +128,11 @@ public class Character : MonoBehaviour
         plantNum.text = "0";
         moveSpeed = 10f;
         plantLimitation = 15;
+        plantLimitationText.text = plantLimitation.ToString();
         seedLimitation = 10;
+        seedLimitationText.text = seedLimitation.ToString();
         waterLimitation = 10;
+        waterLimitationText.text = waterLimitation.ToString();
     }
 
     public bool TakeSeed()
@@ -215,15 +221,18 @@ public class Character : MonoBehaviour
     public void IncreasePlantBag()
     {
         plantLimitation += 15;
+        plantLimitationText.text = plantLimitation.ToString();
     }
 
     public void IncreaseSeedBag()
     {
         seedLimitation += 10;
+        seedLimitationText.text = seedLimitation.ToString();
     }
 
     public void IncreaseWaterBag()
     {
         waterLimitation += 10;
+        waterLimitationText.text = waterLimitation.ToString();
     }
 }
