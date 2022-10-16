@@ -129,10 +129,18 @@ public class Character : MonoBehaviour
         waterLimitation = 10;
     }
 
-    public void TakeSeed()
+    public bool TakeSeed()
     {
-        seedAmount = seedLimitation;
-        seedNum.text = seedAmount.ToString();
+        if (seedAmount == seedLimitation)
+        {
+            return false;
+        }
+        else
+        {
+            seedAmount = seedLimitation;
+            seedNum.text = seedAmount.ToString();
+            return true;
+        }
     }
 
     public bool PlantSeed()
@@ -149,10 +157,18 @@ public class Character : MonoBehaviour
         }
     }
 
-    public void TakeWater()
+    public bool TakeWater()
     {
-        waterAmount = waterLimitation;
-        waterNum.text = waterAmount.ToString();
+        if (waterAmount == waterLimitation)
+        {
+            return false;
+        }
+        else
+        {
+            waterAmount = waterLimitation;
+            waterNum.text = waterAmount.ToString();
+            return true;
+        }
     }
 
     public bool WaterPlant()

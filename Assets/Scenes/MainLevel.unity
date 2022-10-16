@@ -1052,6 +1052,9 @@ MonoBehaviour:
   sellTrigger: {fileID: 566000566}
   coins: {fileID: 229788466}
   cellsContainer: {fileID: 1361565407}
+  backgroundMusic:
+  - {fileID: 8300000, guid: 7845e638309584bd3bae46ea11d69f1a, type: 3}
+  - {fileID: 8300000, guid: 65034d52918254de7878db395b2fb230, type: 3}
   nums:
   - {fileID: 21300000, guid: dec37e4ade6ae45899b8a55938e0c4d5, type: 3}
   - {fileID: 21300000, guid: 1c0b92b8804c545d281f667b3ca2d685, type: 3}
@@ -1535,6 +1538,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: UpgradeTrigger0
       objectReference: {fileID: 0}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: fa3cd1aa322e94c08965767472733a7a, type: 3}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 4edb5cbfd7e774496abca2a396effc6a, type: 3}
     - target: {fileID: 1147791132156092179, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -1545,7 +1560,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1147791132156092179, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: 0.07
       objectReference: {fileID: 0}
     - target: {fileID: 1147791132156092179, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2298,6 +2313,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SellTrigger
       objectReference: {fileID: 0}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 26adffa295f91421d83f036cabaca66d, type: 3}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 4edb5cbfd7e774496abca2a396effc6a, type: 3}
     - target: {fileID: 1147791132156092179, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
       propertyPath: m_RootOrder
       value: 10
@@ -2603,7 +2630,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 743.7584, y: -297.01044}
+  m_AnchoredPosition: {x: 769.95, y: -342}
   m_SizeDelta: {x: 362.8072, y: 362.8092}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &672762388
@@ -3198,6 +3225,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: StoreTrigger
       objectReference: {fileID: 0}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: b89c7d4022e0e4a19b7f6de81562c9d3, type: 3}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 4edb5cbfd7e774496abca2a396effc6a, type: 3}
     - target: {fileID: 1147791132156092179, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
       propertyPath: m_RootOrder
       value: 8
@@ -4933,6 +4972,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: UpgradeTrigger1
       objectReference: {fileID: 0}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: fa3cd1aa322e94c08965767472733a7a, type: 3}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 4edb5cbfd7e774496abca2a396effc6a, type: 3}
     - target: {fileID: 1147791132156092179, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
       propertyPath: m_RootOrder
       value: 1
@@ -4943,7 +4994,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1147791132156092179, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.9399998
+      value: -4.6
       objectReference: {fileID: 0}
     - target: {fileID: 1147791132156092179, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
       propertyPath: m_LocalPosition.z
@@ -6887,6 +6938,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: UpgradeTrigger2
       objectReference: {fileID: 0}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: fa3cd1aa322e94c08965767472733a7a, type: 3}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 4edb5cbfd7e774496abca2a396effc6a, type: 3}
     - target: {fileID: 1147791132156092179, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
       propertyPath: m_RootOrder
       value: 2
@@ -6897,7 +6960,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1147791132156092179, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -9.11
+      value: -9.5
       objectReference: {fileID: 0}
     - target: {fileID: 1147791132156092179, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
       propertyPath: m_LocalPosition.z
@@ -7104,6 +7167,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: WaterTrigger
       objectReference: {fileID: 0}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: 9e72c667bcbfb4bd3aea48b6bfc10870, type: 3}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 4edb5cbfd7e774496abca2a396effc6a, type: 3}
     - target: {fileID: 1147791132156092179, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
       propertyPath: m_RootOrder
       value: 9
@@ -8065,6 +8140,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: SeedTrigger
       objectReference: {fileID: 0}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: b89c7d4022e0e4a19b7f6de81562c9d3, type: 3}
+    - target: {fileID: 1147791132156092178, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
+      propertyPath: audioClips.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: 4edb5cbfd7e774496abca2a396effc6a, type: 3}
     - target: {fileID: 1147791132156092179, guid: 6f914727296a4400b9921d66990a8acc, type: 3}
       propertyPath: m_RootOrder
       value: 7

@@ -7,7 +7,7 @@ using TMPro;
 
 public class WaveManager : MonoBehaviour
 {
-    static private float kWaveTime = 60f;
+    private float kWaveTime = 60f;
     private static int kUpgradePrice = 20;
 
     public Action gameOverAction;
@@ -24,6 +24,7 @@ public class WaveManager : MonoBehaviour
     public CommonInteraction sellTrigger;
     public NumberUIManager coins;
     public GameObject cellsContainer;
+    public AudioClip[] backgroundMusic;
 
     public Sprite[] nums;
 
@@ -33,10 +34,14 @@ public class WaveManager : MonoBehaviour
     private int storedNum = 0;
     private int coinNum = 0;
     private int goalNum = 10;
+    private int lastGoalNum = 10;
+    private AudioSource audioSource;
 
     // Start is called before the first frame update
     void Start()
     {
+        audioSource = GetComponent<AudioSource>();
+
         cells = cellsContainer.GetComponentsInChildren<BasicCell>();
         bigMonth.SetActive(false);
 
@@ -54,21 +59,25 @@ public class WaveManager : MonoBehaviour
         originalPosition = character.transform.position;
         seedTrigger.interactedAction = () =>
         {
-            character.TakeSeed();
+            return character.TakeSeed();
         };
         storeTrigger.interactedAction = () =>
         {
-            storedNum += character.StorePlant();
+            int addNum = character.StorePlant();
+            storedNum += addNum;
             storedNumText.ShowNumber(storedNum);
+            return addNum != 0;
         };
         waterTrigger.interactedAction = () =>
         {
-            character.TakeWater();
+            return character.TakeWater();
         };
         sellTrigger.interactedAction = () =>
         {
-            coinNum += character.StorePlant();
+            int addNum = character.StorePlant();
+            coinNum += addNum;
             coins.ShowNumber(coinNum);
+            return addNum != 0;
         };
     }
 
@@ -82,6 +91,7 @@ public class WaveManager : MonoBehaviour
     {
         storedNum = 0;
         storedNumText.ShowNumber(storedNum);
+        lastGoalNum = 10;
         goalNum = 10;
         goalNumText.ShowNumber(goalNum);
         progress.fillAmount = 0;
@@ -149,8 +159,25 @@ public class WaveManager : MonoBehaviour
 
             StartCoroutine(ShowBigMonth());
 
-            goalNum += months * 10;
-            goalNumText.ShowNumber(goalNum);
+            if (months % 4 == 3)
+            {
+                lastGoalNum = goalNum;
+                goalNum = 0;
+                goalNumText.ShowNumber(goalNum);
+                kWaveTime = 30;
+                audioSource.clip = backgroundMusic[1];
+                audioSource.Play();
+            }
+            else
+            {
+                goalNum = lastGoalNum;
+                goalNum += months * 10;
+                lastGoalNum = goalNum;
+                goalNumText.ShowNumber(goalNum);
+                kWaveTime = 60;
+                audioSource.clip = backgroundMusic[0];
+                audioSource.Play();
+            }
 
             progress.fillAmount = 0;
             StartCoroutine(Countdown());

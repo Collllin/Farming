@@ -36,7 +36,7 @@ public class UpgradeManager : MonoBehaviour
             {
                 if (!waveManager.TryPurchase())
                 {
-                    return;
+                    return false;
                 }
 
                 switch (upgradeTypes[tmpIndex])
@@ -60,6 +60,8 @@ public class UpgradeManager : MonoBehaviour
 
                 upgradeTypes[tmpIndex] = (UpgradeType)999;
                 RefreshUpgrade(tmpIndex);
+
+                return true;
             };
         }
     }

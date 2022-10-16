@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
+public delegate bool InteractionDelegate();
 
 public class CommonInteraction : MonoBehaviour
 {
-    public Action interactedAction;
+    public InteractionDelegate interactedAction;
 
     public SpriteRenderer indicator;
+    public AudioClip[] audioClips;
 
     private bool ableToInteract = false;
     private AudioSource audioSource;
@@ -28,12 +30,19 @@ public class CommonInteraction : MonoBehaviour
             if (Input.GetButtonDown("Interact"))
             {
                 indicator.color = Color.green;
+                if (interactedAction())
+                {
+                    audioSource.clip = audioClips[0];
+                }
+                else
+                {
+                    audioSource.clip = audioClips[1];
+                }
                 audioSource.Play();
             }
             else if (Input.GetButtonUp("Interact"))
             {
                 indicator.color = Color.yellow;
-                interactedAction?.Invoke();
             }
         }
     }
