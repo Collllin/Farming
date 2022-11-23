@@ -746,7 +746,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 293326315}
         m_TargetAssemblyTypeName: WaveManager, Assembly-CSharp
-        m_MethodName: EndUpgrade
+        m_MethodName: CloseStore
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -4471,7 +4471,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 293326315}
         m_TargetAssemblyTypeName: WaveManager, Assembly-CSharp
-        m_MethodName: EndUpgrade
+        m_MethodName: CloseStore
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -6080,7 +6080,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 520f182e5a0f347a68efeb3fc54f5173, type: 3}
   - {fileID: 21300000, guid: c513e5118e56648bab4ad4c2f184b5d5, type: 3}
   - {fileID: 21300000, guid: a97c8e65d4e56494086d1de78adeedd7, type: 3}
-  freeUpgradeImage: {fileID: 0}
 --- !u!222 &1366497418
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -6333,7 +6332,6 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 520f182e5a0f347a68efeb3fc54f5173, type: 3}
   - {fileID: 21300000, guid: c513e5118e56648bab4ad4c2f184b5d5, type: 3}
   - {fileID: 21300000, guid: a97c8e65d4e56494086d1de78adeedd7, type: 3}
-  freeUpgradeImage: {fileID: 0}
 --- !u!4 &1429025153
 Transform:
   m_ObjectHideFlags: 0

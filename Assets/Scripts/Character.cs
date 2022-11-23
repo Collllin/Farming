@@ -196,7 +196,6 @@ public class Character : MonoBehaviour
         }
     }
 
-
     public bool Harvest()
     {
         if (plantAmount < plantLimitation)
@@ -209,6 +208,11 @@ public class Character : MonoBehaviour
         {
             return false;
         }
+    }
+
+    public bool Clean()
+    {
+        return true;
     }
 
     public int StorePlant()
