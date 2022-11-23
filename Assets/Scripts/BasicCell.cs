@@ -7,6 +7,7 @@ public enum CellState
     Empty,
     Seeded,
     Mature,
+    Infested,
 }
 
 public class BasicCell : MonoBehaviour
@@ -94,12 +95,27 @@ public class BasicCell : MonoBehaviour
             case CellState.Mature:
                 if (character.Harvest())
                 {
+                    shouldCountdown = false;
                     spriteRenderer.sprite = null;
                     audioSource.clip = actionSounds[2];
                     audioSource.Play();
                     cellState = CellState.Empty;
                 }
-                shouldCountdown = false;
+                else
+                {
+                    spriteRenderer.sprite = plantSprites[3];
+                    audioSource.clip = actionSounds[0];
+                    audioSource.Play();
+                }
+                break;
+            case CellState.Infested:
+                if (character.Clean())
+                {
+                    spriteRenderer.sprite = null;
+                    audioSource.clip = actionSounds[0];
+                    audioSource.Play();
+                    cellState = CellState.Empty;
+                }
                 break;
         }
 
@@ -131,6 +147,9 @@ public class BasicCell : MonoBehaviour
                     spriteRenderer.sprite = plantSprites[2];
                     break;
                 case CellState.Mature:
+                    cellState = CellState.Infested;
+                    break;
+                case CellState.Infested:
                     break;
             }
 

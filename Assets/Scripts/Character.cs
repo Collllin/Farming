@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using TMPro;
+using Newtonsoft.Json.Linq;
 
 public class Character : MonoBehaviour
 {
@@ -24,8 +25,15 @@ public class Character : MonoBehaviour
     private int waterLimitation = 10;
     private int plantLimitation = 15;
 
-    private int seedAmount = 0;
-    private int waterAmount = 0;
+    private float seedTime;
+    private float waterTime;
+    private int   seedRestoreAmount = 1;
+    private int   waterRestoreAmount = 1;
+    private float seedRegenerateTime = 0.75f;
+    private float waterRegenerateTime = 0.75f;
+
+    private int seedAmount = 10;
+    private int waterAmount = 10;
     private int plantAmount = 0;
 
     private Rigidbody2D rBody;
@@ -34,7 +42,6 @@ public class Character : MonoBehaviour
     private float vspeed;
     private float originalScale;
 
-    // Start is called before the first frame update
     void Start()
     {
         rBody = GetComponent<Rigidbody2D>();
@@ -42,7 +49,6 @@ public class Character : MonoBehaviour
         originalScale = scale.x;
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKey(KeyCode.Escape))
@@ -100,34 +106,16 @@ public class Character : MonoBehaviour
 
         characterPosChanged?.Invoke(transform);
 
-        //if (speed != 0 || vspeed != 0)
-        //{
-        //    if (walk)
-        //    {
-        //        characterAnimator.SetTrigger("Walk");
-        //    }
-        //    else
-        //    {
-        //        characterAnimator.SetTrigger("Run");
-        //    }
-        //    if (!footStepSource.isPlaying)
-        //    {
-        //        footStepSource.Play();
-        //    }
-        //}
-        //else
-        //{
-        //    characterAnimator.SetTrigger("Stand");
-        //    footStepSource.Stop();
-        //}
+        RestoreSeed();
+        RestoreWater();
     }
 
     public void Reset()
     {
-        seedAmount = 0;
-        seedNum.text = "0";
-        waterAmount = 0;
-        waterNum.text = "0";
+        seedAmount = 10;
+        seedNum.text = "10";
+        waterAmount = 10;
+        waterNum.text = "10";
         plantAmount = 0;
         plantNum.text = "0";
         moveSpeed = 10f;
@@ -140,20 +128,6 @@ public class Character : MonoBehaviour
 
         Vector3 newScale = new(originalScale, originalScale, 0);
         farmRange.localScale = newScale;
-    }
-
-    public bool TakeSeed()
-    {
-        if (seedAmount == seedLimitation)
-        {
-            return false;
-        }
-        else
-        {
-            seedAmount = seedLimitation;
-            seedNum.text = seedAmount.ToString();
-            return true;
-        }
     }
 
     public bool PlantSeed()
@@ -170,17 +144,22 @@ public class Character : MonoBehaviour
         }
     }
 
-    public bool TakeWater()
+    public void RestoreSeed()
     {
-        if (waterAmount == waterLimitation)
+        if (seedAmount == seedLimitation)
         {
-            return false;
+            return;
         }
-        else
+
+        if (seedAmount < seedLimitation)
         {
-            waterAmount = waterLimitation;
-            waterNum.text = waterAmount.ToString();
-            return true;
+            seedTime += Time.deltaTime;
+            if (seedTime >= seedRegenerateTime)
+            {
+                seedAmount += seedRestoreAmount;
+                seedNum.text = seedAmount.ToString();
+                seedTime = 0f;
+            }
         }
     }
 
@@ -197,6 +176,26 @@ public class Character : MonoBehaviour
             return false;
         }
     }
+
+    public void RestoreWater()
+    {
+        if (waterAmount == waterLimitation)
+        {
+            return;
+        }
+
+        if (waterAmount < waterLimitation)
+        {
+            waterTime += Time.deltaTime;
+            if (waterTime >= waterRegenerateTime)
+            {
+                waterAmount += waterRestoreAmount;
+                waterNum.text = waterAmount.ToString();
+                waterTime = 0f;
+            }
+        }
+    }
+
 
     public bool Harvest()
     {
@@ -241,6 +240,16 @@ public class Character : MonoBehaviour
     {
         waterLimitation += 10;
         waterLimitationText.text = waterLimitation.ToString();
+    }
+
+    public void DecreaseSeedRegenTime()
+    {
+        seedRegenerateTime -= 0.15f;
+    }
+
+    public void DecreaseWaterRegenTime()
+    {
+        waterRegenerateTime -= 0.15f;
     }
 
     public void IncreaseFarmRange()

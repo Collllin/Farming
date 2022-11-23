@@ -51,7 +51,6 @@ public class CommonInteraction : MonoBehaviour
     {
         if (collision.CompareTag("Player"))
         {
-
             indicator.color = Color.white;
             indicator.gameObject.SetActive(true);
             ableToInteract = true;
