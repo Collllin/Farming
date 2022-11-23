@@ -13,7 +13,7 @@ public class NumberManager : MonoBehaviour
     public GameObject numberPrefab;
 
     private List<Number> numbers = new();
-    private NumberColor numberColor = NumberColor.Red;
+    private NumberColor numberColor = NumberColor.Yellow;
 
     // Start is called before the first frame update
     void Start()
@@ -54,14 +54,20 @@ public class NumberManager : MonoBehaviour
             num.Clear();
         }
 
+        if (number == 0)
+        {
+            numbers[0].ShowNumber(0);
+            return;
+        }
+
         int tmpNumber = number;
         int index = 0;
-        while (tmpNumber > 9)
+        while (tmpNumber > 0)
         {
             int currentNum = tmpNumber % 10;
             if (numbers.Count <= index)
             {
-                Vector3 newPos = new Vector3(numbers[index - 1].transform.position.x - 10, numbers[index - 1].transform.position.y, numbers[index - 1].transform.position.z);
+                Vector3 newPos = new Vector3(numbers[index - 1].transform.position.x - 0.4f, numbers[index - 1].transform.position.y, numbers[index - 1].transform.position.z);
                 GameObject numberObj = Instantiate(numberPrefab, newPos, numbers[index - 1].transform.rotation, transform);
                 Number num = numberObj.GetComponent<Number>();
                 num.SetColor(numberColor);
@@ -70,11 +76,6 @@ public class NumberManager : MonoBehaviour
             numbers[index].ShowNumber(currentNum);
             tmpNumber /= 10;
             index++;
-        }
-
-        if (tmpNumber >= 0)
-        {
-            numbers[index].ShowNumber(tmpNumber);
         }
     }
 }

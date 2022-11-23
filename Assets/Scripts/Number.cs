@@ -10,14 +10,11 @@ public class Number : MonoBehaviour
     private Sprite[] currentNumber;
     private SpriteRenderer spriteRenderer;
 
-    // Start is called before the first frame update
-    void Start()
+    private void Awake()
     {
-        currentNumber = yellowNumbers;
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         

@@ -7,7 +7,7 @@ public class NumberUIManager : MonoBehaviour
     public GameObject numberPrefab;
 
     private List<NumberUI> numbers = new();
-    private NumberColor numberColor = NumberColor.Red;
+    private NumberColor numberColor = NumberColor.Yellow;
 
     private void Awake()
     {

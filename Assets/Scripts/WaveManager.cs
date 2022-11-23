@@ -42,7 +42,6 @@ public class WaveManager : MonoBehaviour
     private int goalNum = 20;
     private int lastGoalNum = 20;
     private AudioSource audioSource;
-    private bool endUpgrade = false;
 
     // Start is called before the first frame update
     void Start()
@@ -202,7 +201,6 @@ public class WaveManager : MonoBehaviour
     {
         Time.timeScale = 1;
         storeMenu.SetActive(false);
-        endUpgrade = false;
     }
 
     private IEnumerator ShowBigMonth()

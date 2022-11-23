@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
 public enum CellState
 {
     Empty,
     Seeded,
     Mature,
-    Infested,
+    Infected,
+    Healing,
 }
 
 public class BasicCell : MonoBehaviour
@@ -17,15 +19,17 @@ public class BasicCell : MonoBehaviour
     public AudioClip[] actionSounds;
 
     private CellState cellState = CellState.Empty;
+    private bool shouldCountdown = true;
     private bool countingDown = false;
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
     private float farmingSecond = 5f;
+    private float infectedSecond = 10f;
 
     // Start is called before the first frame update
     void Start()
     {
-        number.SetColor(NumberColor.Red);
+        number.SetColor(NumberColor.Yellow);
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
     }
@@ -43,7 +47,8 @@ public class BasicCell : MonoBehaviour
             Character character = collision.GetComponentInParent<Character>();
             if (character != null)
             {
-                StartCoroutine(Countdown(character, farmingSecond));
+                CharacterEnter(character);
+                StartCoroutine(Countdown(farmingSecond));
             }
         }
     }
@@ -56,6 +61,7 @@ public class BasicCell : MonoBehaviour
         number.Clear();
         spriteRenderer.sprite = null;
         farmingSecond = 5;
+        infectedSecond = 10;
     }
 
     public void IncreaseFarmSpeed()
@@ -63,9 +69,10 @@ public class BasicCell : MonoBehaviour
         farmingSecond *= 0.9f;
     }
 
-    private IEnumerator Countdown(Character character, float seconds)
+    private void CharacterEnter(Character character)
     {
-        bool shouldCountdown = true;
+        shouldCountdown = true;
+
         switch (cellState)
         {
             case CellState.Empty:
@@ -101,23 +108,22 @@ public class BasicCell : MonoBehaviour
                     audioSource.Play();
                     cellState = CellState.Empty;
                 }
-                else
-                {
-                    spriteRenderer.sprite = plantSprites[3];
-                    audioSource.clip = actionSounds[0];
-                    audioSource.Play();
-                }
                 break;
-            case CellState.Infested:
+            case CellState.Infected:
                 if (character.Clean())
                 {
-                    spriteRenderer.sprite = null;
                     audioSource.clip = actionSounds[0];
                     audioSource.Play();
-                    cellState = CellState.Empty;
+                    spriteRenderer.sprite = null;
+                    cellState = CellState.Healing;
                 }
                 break;
         }
+    }
+
+    private IEnumerator Countdown(float seconds)
+    {
+        bool stateChangeIndicater = false;
 
         if (shouldCountdown)
         {
@@ -145,15 +151,23 @@ public class BasicCell : MonoBehaviour
                 case CellState.Seeded:
                     cellState = CellState.Mature;
                     spriteRenderer.sprite = plantSprites[2];
+                    stateChangeIndicater = true;
                     break;
                 case CellState.Mature:
-                    cellState = CellState.Infested;
+                    cellState = CellState.Infected;
+                    spriteRenderer.sprite = plantSprites[3];
                     break;
-                case CellState.Infested:
+                case CellState.Healing:
+                    cellState = CellState.Empty;
                     break;
             }
 
             countingDown = false;
+
+            if (stateChangeIndicater)
+            {
+                StartCoroutine(Countdown(infectedSecond));
+            }
         }
     }
 }
