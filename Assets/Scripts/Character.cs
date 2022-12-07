@@ -25,8 +25,6 @@ public class Character : MonoBehaviour
     private int waterLimitation = 10;
     private int plantLimitation = 15;
 
-    private float seedTime;
-    private float waterTime;
     private int   seedRestoreAmount = 1;
     private int   waterRestoreAmount = 1;
     private float seedRegenerateTime = 0.75f;
@@ -41,6 +39,9 @@ public class Character : MonoBehaviour
     private float speed;
     private float vspeed;
     private float originalScale;
+
+    private bool seedRestoring = false;
+    private bool waterRestoring = false;
 
     void Start()
     {
@@ -106,8 +107,8 @@ public class Character : MonoBehaviour
 
         characterPosChanged?.Invoke(transform);
 
-        RestoreSeed();
-        RestoreWater();
+        CheckSeedRestoration();
+        CheckWaterRestoration();
     }
 
     public void Reset()
@@ -144,23 +145,23 @@ public class Character : MonoBehaviour
         }
     }
 
-    public void RestoreSeed()
+    private void CheckSeedRestoration()
     {
-        if (seedAmount == seedLimitation)
+        if (seedRestoring || seedAmount >= seedLimitation)
         {
             return;
         }
 
-        if (seedAmount < seedLimitation)
-        {
-            seedTime += Time.deltaTime;
-            if (seedTime >= seedRegenerateTime)
-            {
-                seedAmount += seedRestoreAmount;
-                seedNum.text = seedAmount.ToString();
-                seedTime = 0f;
-            }
-        }
+        StartCoroutine(RestoreSeed());
+    }
+
+    private IEnumerator RestoreSeed()
+    {
+        seedRestoring = true;
+        yield return new WaitForSeconds(seedRegenerateTime);
+        seedAmount += seedRestoreAmount;
+        seedNum.text = seedAmount.ToString();
+        seedRestoring = false;
     }
 
     public bool WaterPlant()
@@ -177,23 +178,23 @@ public class Character : MonoBehaviour
         }
     }
 
-    public void RestoreWater()
+    private void CheckWaterRestoration()
     {
-        if (waterAmount == waterLimitation)
+        if (waterRestoring || waterAmount >= waterLimitation)
         {
             return;
         }
 
-        if (waterAmount < waterLimitation)
-        {
-            waterTime += Time.deltaTime;
-            if (waterTime >= waterRegenerateTime)
-            {
-                waterAmount += waterRestoreAmount;
-                waterNum.text = waterAmount.ToString();
-                waterTime = 0f;
-            }
-        }
+        StartCoroutine(RestoreWater());
+    }
+
+    private IEnumerator RestoreWater()
+    {
+        waterRestoring = true;
+        yield return new WaitForSeconds(waterRegenerateTime);
+        waterAmount += waterRestoreAmount;
+        waterNum.text = waterAmount.ToString();
+        waterRestoring = false;
     }
 
     public bool Harvest()

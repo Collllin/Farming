@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
+using System;
 
 public enum CellState
 {
     Empty,
     Seeded,
+    Growing,
     Mature,
+    Infecting,
     Infected,
     Healing,
 }
@@ -19,12 +21,11 @@ public class BasicCell : MonoBehaviour
     public AudioClip[] actionSounds;
 
     private CellState cellState = CellState.Empty;
-    private bool shouldCountdown = true;
     private bool countingDown = false;
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
     private float farmingSecond = 5f;
-    private float infectedSecond = 10f;
+    private float infectionSecond = 10f;
 
     // Start is called before the first frame update
     void Start()
@@ -40,15 +41,14 @@ public class BasicCell : MonoBehaviour
         
     }
 
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!countingDown && collision.CompareTag("Range"))
+        if (collision.CompareTag("Range"))
         {
             Character character = collision.GetComponentInParent<Character>();
             if (character != null)
             {
                 CharacterEnter(character);
-                StartCoroutine(Countdown(farmingSecond));
             }
         }
     }
@@ -61,7 +61,7 @@ public class BasicCell : MonoBehaviour
         number.Clear();
         spriteRenderer.sprite = null;
         farmingSecond = 5;
-        infectedSecond = 10;
+        infectionSecond = 10;
     }
 
     public void IncreaseFarmSpeed()
@@ -71,103 +71,147 @@ public class BasicCell : MonoBehaviour
 
     private void CharacterEnter(Character character)
     {
-        shouldCountdown = true;
+        bool shouldSwitchState = false;
+        bool harvest = false;
 
         switch (cellState)
         {
             case CellState.Empty:
-                if (!character.PlantSeed())
+                if (character.PlantSeed())
                 {
-                    shouldCountdown = false;
-                }
-                else
-                {
-                    spriteRenderer.sprite = plantSprites[0];
-                    audioSource.clip = actionSounds[0];
-                    audioSource.Play();
+                    shouldSwitchState = true;
                 }
                 break;
             case CellState.Seeded:
-                if (!character.WaterPlant())
+                if (character.WaterPlant())
                 {
-                    shouldCountdown = false;
-                }
-                else
-                {
-                    spriteRenderer.sprite = plantSprites[1];
-                    audioSource.clip = actionSounds[1];
-                    audioSource.Play();
+                    shouldSwitchState = true;
                 }
                 break;
             case CellState.Mature:
+            case CellState.Infecting:
                 if (character.Harvest())
                 {
-                    shouldCountdown = false;
-                    spriteRenderer.sprite = null;
-                    audioSource.clip = actionSounds[2];
-                    audioSource.Play();
-                    cellState = CellState.Empty;
+                    shouldSwitchState = true;
+                    harvest = true;
                 }
                 break;
             case CellState.Infected:
                 if (character.Clean())
                 {
-                    audioSource.clip = actionSounds[0];
-                    audioSource.Play();
-                    spriteRenderer.sprite = null;
-                    cellState = CellState.Healing;
+                    shouldSwitchState = true;
                 }
+                break;
+        }
+
+        if (shouldSwitchState)
+        {
+            if (!countingDown || harvest)
+            {
+                SwitchState(harvest);
+            }
+        }
+    }
+
+    private void SwitchState(bool harvest = false)
+    {
+        switch (cellState)
+        {
+            case CellState.Empty:
+                cellState = CellState.Seeded;
+                spriteRenderer.sprite = plantSprites[0];
+                audioSource.clip = actionSounds[0];
+                audioSource.Play();
+                StartCoroutine(Countdown(farmingSecond));
+                break;
+            case CellState.Seeded:
+                cellState = CellState.Growing;
+                spriteRenderer.sprite = plantSprites[1];
+                audioSource.clip = actionSounds[1];
+                audioSource.Play();
+                StartCoroutine(Countdown(farmingSecond, () =>
+                {
+                    SwitchState();
+                }));
+                break;
+            case CellState.Growing:
+                cellState = CellState.Mature;
+                spriteRenderer.sprite = plantSprites[2];
+                SwitchState();
+                break;
+            case CellState.Mature:
+                if (harvest)
+                {
+                    Harvest();
+                }
+                else
+                {
+                    cellState = CellState.Infecting;
+                    StartCoroutine(Countdown(infectionSecond, () =>
+                    {
+                        SwitchState();
+                    }));
+                }
+                break;
+            case CellState.Infecting:
+                if (harvest)
+                {
+                    Harvest();
+                }
+                else
+                {
+                    cellState = CellState.Infected;
+                    spriteRenderer.sprite = plantSprites[3];
+                }
+                break;
+            case CellState.Infected:
+                cellState = CellState.Healing;
+                spriteRenderer.sprite = null;
+                audioSource.clip = actionSounds[2];
+                audioSource.Play();
+                StartCoroutine(Countdown(farmingSecond, () =>
+                {
+                    SwitchState();
+                }));
+                break;
+            case CellState.Healing:
+                cellState = CellState.Empty;
                 break;
         }
     }
 
-    private IEnumerator Countdown(float seconds)
+    private IEnumerator Countdown(float seconds, Action countDownCompleteAction = null)
     {
-        bool stateChangeIndicater = false;
+        countingDown = true;
 
-        if (shouldCountdown)
+        int integerSeconds = (int)seconds;
+        float tmpSeconds = seconds - integerSeconds;
+
+        number.ShowNumber(integerSeconds);
+        yield return new WaitForSeconds(tmpSeconds);
+
+        while (integerSeconds > 0)
         {
-            countingDown = true;
-
-            int integerSeconds = (int)seconds;
-            float tmpSeconds = seconds - integerSeconds;
-
             number.ShowNumber(integerSeconds);
-            yield return new WaitForSeconds(tmpSeconds);
-
-            while (integerSeconds > 0)
-            {
-                number.ShowNumber(integerSeconds);
-                yield return new WaitForSeconds(1);
-                integerSeconds--;
-            }
-
-            number.Clear();
-            switch (cellState)
-            {
-                case CellState.Empty:
-                    cellState = CellState.Seeded;
-                    break;
-                case CellState.Seeded:
-                    cellState = CellState.Mature;
-                    spriteRenderer.sprite = plantSprites[2];
-                    stateChangeIndicater = true;
-                    break;
-                case CellState.Mature:
-                    cellState = CellState.Infected;
-                    spriteRenderer.sprite = plantSprites[3];
-                    break;
-                case CellState.Healing:
-                    cellState = CellState.Empty;
-                    break;
-            }
-
-            countingDown = false;
-
-            if (stateChangeIndicater)
-            {
-                StartCoroutine(Countdown(infectedSecond));
-            }
+            yield return new WaitForSeconds(1);
+            integerSeconds--;
         }
+
+        number.Clear();
+
+        countingDown = false;
+
+        countDownCompleteAction?.Invoke();
+    }
+
+    private void Harvest()
+    {
+        cellState = CellState.Empty;
+        spriteRenderer.sprite = null;
+        audioSource.clip = actionSounds[2];
+        audioSource.Play();
+        StopAllCoroutines();
+        number.Clear();
+        countingDown = false;
     }
 }
