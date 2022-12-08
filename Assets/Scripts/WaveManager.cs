@@ -6,17 +6,12 @@ using UnityEngine.UI;
 
 public class WaveManager : MonoBehaviour
 {
-    private float kWaveTime = 60f;
-    private static readonly int kUpgradePrice = 20;
+    private static readonly float kWaveTime = 60f;
 
     public Character character;
     public GameObject cellsContainer;
-    //public UpgradeManager upgradeManager;
 
     [Header("---- UI ----")]
-    [SerializeField] GameObject upgradeMenu;
-    [SerializeField] GameObject storeMenu;
-    public Action gameOverAction;
     public Image progress;
     public NumberUIManager monthNum;
     public GameObject bigMonth;
@@ -33,6 +28,9 @@ public class WaveManager : MonoBehaviour
     [Header("---- Sound ----")]
     public AudioClip[] backgroundMusic;
 
+    public Action gameOverAction;
+    public Action<Action> startUpgradeAction;
+
     private BasicCell[] cells;
     private Vector3 originalPosition;
     private int months = 0;
@@ -40,7 +38,6 @@ public class WaveManager : MonoBehaviour
     private int coinNum = 0;
     const int   basicGoalNum = 10;
     private int goalNum = 20;
-    private int lastGoalNum = 20;
     private AudioSource audioSource;
 
     // Start is called before the first frame update
@@ -50,8 +47,6 @@ public class WaveManager : MonoBehaviour
 
         cells = cellsContainer.GetComponentsInChildren<BasicCell>();
         bigMonth.SetActive(false);
-        upgradeMenu.SetActive(false);
-        storeMenu.SetActive(false);
 
         coins.SetColor(NumberColor.Yellow);
         coins.ShowNumber(coinNum);
@@ -96,7 +91,6 @@ public class WaveManager : MonoBehaviour
     {
         storedNum = 0;
         storedNumText.ShowNumber(storedNum);
-        lastGoalNum = 20;
         goalNum = 20;
         goalNumText.ShowNumber(goalNum);
         progress.fillAmount = 0;
@@ -116,11 +110,11 @@ public class WaveManager : MonoBehaviour
         StartCoroutine(Countdown());
     }
 
-    public bool TryPurchase()
+    public bool TryPurchase(int price)
     {
-        if (coinNum >= kUpgradePrice)
+        if (coinNum >= price)
         {
-            coinNum -= kUpgradePrice;
+            coinNum -= price;
             coins.ShowNumber(coinNum);
             return true;
         }
@@ -157,50 +151,39 @@ public class WaveManager : MonoBehaviour
             storedNum = 0;
             storedNumText.ShowNumber(storedNum);
 
-            StartUpgrade();
-            
-            months++;
-            monthNum.ShowNumber(months);
+            character.ableToMove = false;
+            foreach (var cell in cells)
+            {
+                cell.Reset();
+            }
+            StartUpgrade(() =>
+            {
+                months++;
+                monthNum.ShowNumber(months);
 
-            StartCoroutine(ShowBigMonth());
+                StartCoroutine(ShowBigMonth());
 
-            goalNum = lastGoalNum + (int)(Math.Sqrt(months)) * basicGoalNum;
-            lastGoalNum = goalNum;
+                goalNum += (int)(Math.Sqrt(months)) * basicGoalNum;
 
-            goalNumText.ShowNumber(goalNum);
+                goalNumText.ShowNumber(goalNum);
 
-            kWaveTime = 60;
-            audioSource.clip = backgroundMusic[0];
-            audioSource.Play();
+                audioSource.clip = backgroundMusic[0];
+                audioSource.Play();
 
-            progress.fillAmount = 0;
-            StartCoroutine(Countdown());
+                progress.fillAmount = 0;
+                StartCoroutine(Countdown());
+
+                character.ableToMove = true;
+            });
         }
     }
 
-    public void StartUpgrade()
+    private void StartUpgrade(Action upgradeComplete)
     {
-        Time.timeScale = 0;
-        upgradeMenu.SetActive(true);
-    }
-
-    public void EndUpgrade()
-    {
-        Time.timeScale = 1;
-        upgradeMenu.SetActive(false);
-        OpenStore();
-    }
-
-    public void OpenStore()
-    {
-        Time.timeScale = 0;
-        storeMenu.SetActive(true);  
-    }
-
-    public void CloseStore()
-    {
-        Time.timeScale = 1;
-        storeMenu.SetActive(false);
+        startUpgradeAction?.Invoke(() =>
+        {
+            upgradeComplete?.Invoke();
+        });
     }
 
     private IEnumerator ShowBigMonth()

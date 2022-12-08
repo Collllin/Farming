@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using System;
+using System.Reflection;
 
 public enum UpgradeType
 {
@@ -17,20 +19,99 @@ public enum UpgradeType
 
 public class UpgradeManager : MonoBehaviour
 {
-    public WaveManager waveManager;
-    public Character character;
-    public Button[] upgradeChoices; 
-    public SpriteRenderer[] upgradeImages;
-    public Sprite[] upgradeSprites;
+    [SerializeField] private WaveManager waveManager;
+    [SerializeField] private Character character;
 
-    private UpgradeType[] upgradeTypes = { UpgradeType.PlantBag, UpgradeType.SeedBag, UpgradeType.WaterBag };
+    [SerializeField] private Sprite[] upgradeSprites;
+    [SerializeField] private Sprite[] storeSprites;
+
+    [SerializeField] private RectTransform choicePrefab;
+
+    private List<GameObject> currentChoices = new(); 
+    private readonly int upgradeNum = 3;
+    private readonly int storeNum = 3;
+
+    private List<UpgradeType> upgradeTypes = new();
+    private RectTransform rectTransform;
 
     // Start is called before the first frame update
     void Start()
     {
-        RefreshUpgrade(0);
-        RefreshUpgrade(1);
-        RefreshUpgrade(2);
+        gameObject.SetActive(false);
+        rectTransform = GetComponent<RectTransform>();
+
+        waveManager.startUpgradeAction = (completeAction) =>
+        {
+            gameObject.SetActive(true);
+
+            ShowUpdate(() =>
+            {
+                foreach (var obj in currentChoices)
+                {
+                    Destroy(obj);
+                }
+                currentChoices.Clear();
+
+                ShowStore(() =>
+                {
+                    gameObject.SetActive(false);
+
+                    foreach (var obj in currentChoices)
+                    {
+                        Destroy(obj);
+                    }
+                    currentChoices.Clear();
+
+                    completeAction?.Invoke();
+                });
+            });
+        };
+    }
+
+    private void ShowUpdate(Action completeAction)
+    {
+        upgradeTypes.Clear();
+        for (int i = 0; i < upgradeNum; i++)
+        {
+            float gap = (rectTransform.rect.width - choicePrefab.rect.width * upgradeNum) / (upgradeNum + 1);
+            Vector3 pos = new Vector3(choicePrefab.position.x + (i + 1) * gap + (i * 2 + 1) * choicePrefab.rect.width / 2,
+                choicePrefab.position.y, choicePrefab.position.z);
+            GameObject choiceObj = Instantiate(choicePrefab.gameObject, pos, transform.rotation, transform);
+            choiceObj.SetActive(true);
+            currentChoices.Add(choiceObj);
+
+            RefreshUpgrade(choiceObj.GetComponent<Image>());
+            CommonButton button = choiceObj.GetComponent<CommonButton>();
+            int index = i;
+            button.buttonClickAction = () =>
+            {
+                Upgrade(upgradeTypes[index]);
+                completeAction?.Invoke();
+            };
+        }
+    }
+
+    private void ShowStore(Action completeAction)
+    {
+        upgradeTypes.Clear();
+        for (int i = 0; i < upgradeNum; i++)
+        {
+            float gap = (rectTransform.rect.width - choicePrefab.rect.width * upgradeNum) / (upgradeNum + 1);
+            Vector3 pos = new Vector3(choicePrefab.position.x + (i + 1) * gap + (i * 2 + 1) * choicePrefab.rect.width / 2,
+                choicePrefab.position.y, choicePrefab.position.z);
+            GameObject choiceObj = Instantiate(choicePrefab.gameObject, pos, transform.rotation, transform);
+            choiceObj.SetActive(true);
+            currentChoices.Add(choiceObj);
+
+            int index = i;
+            RefreshUpgrade(choiceObj.GetComponent<Image>());
+            CommonButton button = choiceObj.GetComponent<CommonButton>();
+            button.buttonClickAction = () =>
+            {
+                Upgrade(upgradeTypes[index]);
+                completeAction?.Invoke();
+            };
+        }
     }
 
     // Update is called once per frame
@@ -38,23 +119,6 @@ public class UpgradeManager : MonoBehaviour
     {
         
     }
-
-    //public void GetFreeUpdate(bool real)
-    //{
-    //    if (real)
-    //    {
-    //        int tmpIndex = Random.Range(0, 8);
-    //        Upgrade((UpgradeType)tmpIndex);
-    //        freeUpgradeImage.color = new Color(freeUpgradeImage.color.r, freeUpgradeImage.color.g, freeUpgradeImage.color.b, 1);
-    //        freeUpgradeImage.sprite = upgradeSprites[tmpIndex];
-    //        AudioSource audio = freeUpgradeImage.GetComponent<AudioSource>();
-    //        audio.Play();
-    //    }
-    //    else
-    //    {
-    //        freeUpgradeImage.color = new Color(freeUpgradeImage.color.r, freeUpgradeImage.color.g, freeUpgradeImage.color.b, 0);
-    //    }
-    //}
 
     private void Upgrade(UpgradeType type)
     {
@@ -87,14 +151,14 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
-    private void RefreshUpgrade(int index)
+    private void RefreshUpgrade(Image image)
     {
         bool found = false;
         int tmpIndex = 0;
         while (!found)
         {
             found = true;
-            tmpIndex = Random.Range(0, 8);
+            tmpIndex = UnityEngine.Random.Range(0, 8);
             foreach (var type in upgradeTypes)
             {
                 if ((int)type == tmpIndex)
@@ -105,7 +169,7 @@ public class UpgradeManager : MonoBehaviour
             }
         }
 
-        upgradeTypes[index] = (UpgradeType)tmpIndex;
-        upgradeImages[index].sprite = upgradeSprites[tmpIndex];
+        upgradeTypes.Add((UpgradeType)tmpIndex);
+        image.sprite = upgradeSprites[tmpIndex];
     }
 }
