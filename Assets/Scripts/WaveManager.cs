@@ -8,8 +8,8 @@ public class WaveManager : MonoBehaviour
 {
     private static readonly float kWaveTime = 60f;
 
-    public Character character;
-    public GameObject cellsContainer;
+    [SerializeField] private Character character;
+    [SerializeField] private CellManager cellManager;
 
     [Header("---- UI ----")]
     public Image progress;
@@ -31,7 +31,6 @@ public class WaveManager : MonoBehaviour
     public Action gameOverAction;
     public Action<Action> startUpgradeAction;
 
-    private BasicCell[] cells;
     private Vector3 originalPosition;
     private int months = 0;
     private int storedNum = 0;
@@ -45,7 +44,6 @@ public class WaveManager : MonoBehaviour
     {
         audioSource = GetComponent<AudioSource>();
 
-        cells = cellsContainer.GetComponentsInChildren<BasicCell>();
         bigMonth.SetActive(false);
 
         coins.SetColor(NumberColor.Yellow);
@@ -99,10 +97,7 @@ public class WaveManager : MonoBehaviour
         character.transform.position = originalPosition;
         character.ableToMove = true;
         character.Reset();
-        foreach (var cell in cells)
-        {
-            cell.Reset();
-        }
+        cellManager.ResetCells();
         coinNum = 0;
         coins.ShowNumber(coinNum);
 
@@ -126,10 +121,7 @@ public class WaveManager : MonoBehaviour
 
     public void IncreaseFarmSpeed()
     {
-        foreach (var cell in cells)
-        {
-            cell.IncreaseFarmSpeed();
-        }
+        cellManager.IncreaseFarmSpeed();
     }
 
     private IEnumerator Countdown()
@@ -152,10 +144,8 @@ public class WaveManager : MonoBehaviour
             storedNumText.ShowNumber(storedNum);
 
             character.ableToMove = false;
-            foreach (var cell in cells)
-            {
-                cell.Reset();
-            }
+            character.ResetAfterMonth();
+            cellManager.ResetCells(false);
             StartUpgrade(() =>
             {
                 months++;

@@ -129,6 +129,26 @@ public class Character : MonoBehaviour
 
         Vector3 newScale = new(originalScale, originalScale, 0);
         farmRange.localScale = newScale;
+
+        seedRegenerateTime = 0.75f;
+        waterRegenerateTime = 0.75f;
+
+        StopAllCoroutines();
+        waterRestoring = false;
+        seedRestoring = false;
+    }
+
+    public void ResetAfterMonth()
+    {
+        seedAmount = seedLimitation;
+        seedNum.text = seedAmount.ToString();
+        waterAmount = waterLimitation;
+        waterNum.text = waterAmount.ToString();
+        plantAmount = 0;
+        plantNum.text = "0";
+        StopAllCoroutines();
+        waterRestoring = false;
+        seedRestoring = false;
     }
 
     public bool PlantSeed()

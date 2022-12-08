@@ -16,9 +16,9 @@ public enum CellState
 
 public class BasicCell : MonoBehaviour
 {
-    public NumberManager number;
-    public Sprite[] plantSprites;
-    public AudioClip[] actionSounds;
+    [SerializeField] private NumberManager number;
+    [SerializeField] private Sprite[] plantSprites;
+    [SerializeField] private AudioClip[] actionSounds;
 
     private CellState cellState = CellState.Empty;
     private bool countingDown = false;
@@ -27,12 +27,19 @@ public class BasicCell : MonoBehaviour
     private float farmingSecond = 5f;
     private float infectionSecond = 10f;
 
-    // Start is called before the first frame update
-    void Start()
+    private bool active = false;
+
+    private void Awake()
     {
         number.SetColor(NumberColor.Yellow);
         spriteRenderer = GetComponent<SpriteRenderer>();
         audioSource = GetComponent<AudioSource>();
+    }
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        
     }
 
     // Update is called once per frame
@@ -43,6 +50,11 @@ public class BasicCell : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        if (!active)
+        {
+            return;
+        }
+
         if (collision.CompareTag("Range"))
         {
             Character character = collision.GetComponentInParent<Character>();
@@ -62,6 +74,20 @@ public class BasicCell : MonoBehaviour
         spriteRenderer.sprite = null;
         farmingSecond = 5;
         infectionSecond = 10;
+        active = false;
+    }
+
+    public void SetCellActive(bool active)
+    {
+        this.active = active;
+        if (active == false)
+        {
+            StopAllCoroutines();
+            cellState = CellState.Empty;
+            countingDown = false;
+            number.Clear();
+            spriteRenderer.sprite = null;
+        }
     }
 
     public void IncreaseFarmSpeed()
