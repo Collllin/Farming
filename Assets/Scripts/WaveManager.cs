@@ -9,38 +9,32 @@ public class WaveManager : MonoBehaviour
     private float kWaveTime = 60f;
     private static readonly int kUpgradePrice = 20;
 
-    public Character character;
-    public GameObject cellsContainer;
-    //public UpgradeManager upgradeManager;
-
-    [Header("---- UI ----")]
-    [SerializeField] GameObject upgradeMenu;
-    [SerializeField] GameObject storeMenu;
     public Action gameOverAction;
     public Image progress;
     public NumberUIManager monthNum;
     public GameObject bigMonth;
     public NumberUIManager bigMonthNum;
+    public Character character;
+    public UpgradeManager upgradeManager;
     public NumberUIManager storedNumText;
     public NumberUIManager goalNumText;
-    public NumberUIManager coins;
-    public Sprite[] nums;
-
-    [Header("---- Trigger ----")]
+    public CommonInteraction seedTrigger;
     public CommonInteraction storeTrigger;
+    public CommonInteraction waterTrigger;
     public CommonInteraction sellTrigger;
-
-    [Header("---- Sound ----")]
+    public NumberUIManager coins;
+    public GameObject cellsContainer;
     public AudioClip[] backgroundMusic;
+
+    public Sprite[] nums;
 
     private BasicCell[] cells;
     private Vector3 originalPosition;
     private int months = 0;
     private int storedNum = 0;
     private int coinNum = 0;
-    const int   basicGoalNum = 10;
-    private int goalNum = 20;
-    private int lastGoalNum = 20;
+    private int goalNum = 10;
+    private int lastGoalNum = 10;
     private AudioSource audioSource;
 
     // Start is called before the first frame update
@@ -50,8 +44,6 @@ public class WaveManager : MonoBehaviour
 
         cells = cellsContainer.GetComponentsInChildren<BasicCell>();
         bigMonth.SetActive(false);
-        upgradeMenu.SetActive(false);
-        storeMenu.SetActive(false);
 
         coins.SetColor(NumberColor.Yellow);
         coins.ShowNumber(coinNum);
@@ -65,13 +57,20 @@ public class WaveManager : MonoBehaviour
         goalNumText.ShowNumber(goalNum);
 
         originalPosition = character.transform.position;
-
+        seedTrigger.interactedAction = () =>
+        {
+            return character.TakeSeed();
+        };
         storeTrigger.interactedAction = () =>
         {
             int addNum = character.StorePlant();
             storedNum += addNum;
             storedNumText.ShowNumber(storedNum);
             return addNum != 0;
+        };
+        waterTrigger.interactedAction = () =>
+        {
+            return character.TakeWater();
         };
         sellTrigger.interactedAction = () =>
         {
@@ -85,19 +84,15 @@ public class WaveManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.I))
-        {
-            storedNum = goalNum;
-            progress.fillAmount = 1;
-        }
+        
     }
 
     public void StartGame()
     {
         storedNum = 0;
         storedNumText.ShowNumber(storedNum);
-        lastGoalNum = 20;
-        goalNum = 20;
+        lastGoalNum = 10;
+        goalNum = 10;
         goalNumText.ShowNumber(goalNum);
         progress.fillAmount = 0;
         months = 0;
@@ -112,6 +107,7 @@ public class WaveManager : MonoBehaviour
         coinNum = 0;
         coins.ShowNumber(coinNum);
 
+        upgradeManager.GetFreeUpdate(false);
         StartCoroutine(ShowBigMonth());
         StartCoroutine(Countdown());
     }
@@ -162,42 +158,38 @@ public class WaveManager : MonoBehaviour
 
             StartCoroutine(ShowBigMonth());
 
-            goalNum = lastGoalNum + (int)(Math.Sqrt(months)) * basicGoalNum;
-            lastGoalNum = goalNum;
+            if (months % 4 == 3)
+            {
+                lastGoalNum = goalNum;
+                goalNum = 0;
+                goalNumText.ShowNumber(goalNum);
+                kWaveTime = 30;
+                audioSource.clip = backgroundMusic[1];
+                audioSource.Play();
+            }
+            else
+            {
+                goalNum = lastGoalNum;
+                goalNum += 20;
+                lastGoalNum = goalNum;
+                goalNumText.ShowNumber(goalNum);
+                kWaveTime = 60;
+                audioSource.clip = backgroundMusic[0];
+                audioSource.Play();
+            }
 
-            goalNumText.ShowNumber(goalNum);
-
-            kWaveTime = 60;
-            audioSource.clip = backgroundMusic[0];
-            audioSource.Play();
+            if (months % 3 == 2)
+            {
+                upgradeManager.GetFreeUpdate(true);
+            }
+            else
+            {
+                upgradeManager.GetFreeUpdate(false);
+            }
 
             progress.fillAmount = 0;
             StartCoroutine(Countdown());
         }
-    }
-
-    public void StartUpgrade()
-    {
-        Time.timeScale = 0;
-        upgradeMenu.SetActive(true);
-    }
-
-    public void EndUpgrade()
-    {
-        Time.timeScale = 1;
-        upgradeMenu.SetActive(false);
-    }
-
-    public void OpenStore()
-    {
-        Time.timeScale = 0;
-        storeMenu.SetActive(true);
-    }
-
-    public void CloseStore()
-    {
-        Time.timeScale = 1;
-        storeMenu.SetActive(false);
     }
 
     private IEnumerator ShowBigMonth()

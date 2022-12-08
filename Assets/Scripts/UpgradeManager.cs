@@ -10,8 +10,6 @@ public enum UpgradeType
     WaterBag,
     MoveSpeed,
     FarmSpeed,
-    SeedRegenTime,
-    WaterRegenTime,
     FarmRange,
 }
 
@@ -19,7 +17,6 @@ public class UpgradeManager : MonoBehaviour
 {
     public WaveManager waveManager;
     public Character character;
-    public Button[] upgradeChoices; 
     public CommonInteraction[] upgradeTriggers;
     public SpriteRenderer[] upgradeImages;
     public Sprite[] upgradeSprites;
@@ -60,22 +57,22 @@ public class UpgradeManager : MonoBehaviour
         
     }
 
-    //public void GetFreeUpdate(bool real)
-    //{
-    //    if (real)
-    //    {
-    //        int tmpIndex = Random.Range(0, 8);
-    //        Upgrade((UpgradeType)tmpIndex);
-    //        freeUpgradeImage.color = new Color(freeUpgradeImage.color.r, freeUpgradeImage.color.g, freeUpgradeImage.color.b, 1);
-    //        freeUpgradeImage.sprite = upgradeSprites[tmpIndex];
-    //        AudioSource audio = freeUpgradeImage.GetComponent<AudioSource>();
-    //        audio.Play();
-    //    }
-    //    else
-    //    {
-    //        freeUpgradeImage.color = new Color(freeUpgradeImage.color.r, freeUpgradeImage.color.g, freeUpgradeImage.color.b, 0);
-    //    }
-    //}
+    public void GetFreeUpdate(bool real)
+    {
+        if (real)
+        {
+            int tmpIndex = Random.Range(0, 6);
+            Upgrade((UpgradeType)tmpIndex);
+            freeUpgradeImage.color = new Color(freeUpgradeImage.color.r, freeUpgradeImage.color.g, freeUpgradeImage.color.b, 1);
+            freeUpgradeImage.sprite = upgradeSprites[tmpIndex];
+            AudioSource audio = freeUpgradeImage.GetComponent<AudioSource>();
+            audio.Play();
+        }
+        else
+        {
+            freeUpgradeImage.color = new Color(freeUpgradeImage.color.r, freeUpgradeImage.color.g, freeUpgradeImage.color.b, 0);
+        }
+    }
 
     private void Upgrade(UpgradeType type)
     {
@@ -96,12 +93,6 @@ public class UpgradeManager : MonoBehaviour
             case UpgradeType.WaterBag:
                 character.IncreaseWaterBag();
                 break;
-            case UpgradeType.SeedRegenTime:
-                character.DecreaseSeedRegenTime();
-                break;
-            case UpgradeType.WaterRegenTime:
-                character.DecreaseWaterRegenTime();
-                break;
             case UpgradeType.FarmRange:
                 character.IncreaseFarmRange();
                 break;
@@ -115,7 +106,7 @@ public class UpgradeManager : MonoBehaviour
         while (!found)
         {
             found = true;
-            tmpIndex = Random.Range(0, 8);
+            tmpIndex = Random.Range(0, 6);
             foreach (var type in upgradeTypes)
             {
                 if ((int)type == tmpIndex)
