@@ -100,42 +100,45 @@ public class BasicCell : MonoBehaviour
         bool shouldSwitchState = false;
         bool harvest = false;
 
-        switch (cellState)
+        if (cellState == CellState.Mature || cellState == CellState.Infecting)
         {
-            case CellState.Empty:
-                if (character.PlantSeed())
+            if (character.Harvest())
+            {
+                shouldSwitchState = true;
+                harvest = true;
+            }
+        }
+        else
+        {
+            if (!countingDown)
+            {
+                switch (cellState)
                 {
-                    shouldSwitchState = true;
+                    case CellState.Empty:
+                        if (character.PlantSeed())
+                        {
+                            shouldSwitchState = true;
+                        }
+                        break;
+                    case CellState.Seeded:
+                        if (character.WaterPlant())
+                        {
+                            shouldSwitchState = true;
+                        }
+                        break;
+                    case CellState.Infected:
+                        if (character.Clean())
+                        {
+                            shouldSwitchState = true;
+                        }
+                        break;
                 }
-                break;
-            case CellState.Seeded:
-                if (character.WaterPlant())
-                {
-                    shouldSwitchState = true;
-                }
-                break;
-            case CellState.Mature:
-            case CellState.Infecting:
-                if (character.Harvest())
-                {
-                    shouldSwitchState = true;
-                    harvest = true;
-                }
-                break;
-            case CellState.Infected:
-                if (character.Clean())
-                {
-                    shouldSwitchState = true;
-                }
-                break;
+            }
         }
 
         if (shouldSwitchState)
         {
-            if (!countingDown || harvest)
-            {
-                SwitchState(harvest);
-            }
+            SwitchState(harvest);
         }
     }
 

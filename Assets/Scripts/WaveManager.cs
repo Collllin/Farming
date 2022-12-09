@@ -32,10 +32,10 @@ public class WaveManager : MonoBehaviour
     public Action<Action> startUpgradeAction;
 
     private Vector3 originalPosition;
-    private int months = 0;
+    private int months = 1;
     private int storedNum = 0;
     private int coinNum = 0;
-    const int   basicGoalNum = 10;
+    const double   basicGoalNum = 10;
     private int goalNum = 20;
     private AudioSource audioSource;
 
@@ -92,7 +92,7 @@ public class WaveManager : MonoBehaviour
         goalNum = 20;
         goalNumText.ShowNumber(goalNum);
         progress.fillAmount = 0;
-        months = 0;
+        months = 1;
         monthNum.ShowNumber(months);
         character.transform.position = originalPosition;
         character.ableToMove = true;
@@ -153,7 +153,8 @@ public class WaveManager : MonoBehaviour
 
                 StartCoroutine(ShowBigMonth());
 
-                goalNum += (int)(Math.Sqrt(months)) * basicGoalNum;
+                double goal = Math.Log(months, 3.0) * basicGoalNum;
+                goalNum += (int)goal;
 
                 goalNumText.ShowNumber(goalNum);
 

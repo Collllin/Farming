@@ -1604,7 +1604,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   character: {fileID: 1556443338}
-  cellManager: {fileID: 0}
+  cellManager: {fileID: 1361565409}
   progress: {fileID: 1497294465}
   monthNum: {fileID: 339385039}
   bigMonth: {fileID: 709736008}
