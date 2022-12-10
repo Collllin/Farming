@@ -1611,7 +1611,6 @@ MonoBehaviour:
   bigMonthNum: {fileID: 1992475109}
   storedNumText: {fileID: 960690071}
   goalNumText: {fileID: 554301885}
-  coins: {fileID: 229788466}
   nums:
   - {fileID: 21300000, guid: dec37e4ade6ae45899b8a55938e0c4d5, type: 3}
   - {fileID: 21300000, guid: 1c0b92b8804c545d281f667b3ca2d685, type: 3}
@@ -8267,6 +8266,7 @@ MonoBehaviour:
   seedLimitationText: {fileID: 1495117624}
   waterLimitationText: {fileID: 2060204312}
   plantLimitationText: {fileID: 718608540}
+  coins: {fileID: 229788466}
   farmRange: {fileID: 1695956634}
 --- !u!1 &1567953857
 GameObject:
@@ -10556,7 +10556,13 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 4e1e0058e96471d4e8da6ba51f439f49, type: 3}
   - {fileID: 21300000, guid: a4506f5089a05ba418d562f7cc13e1e0, type: 3}
   - {fileID: 21300000, guid: a97c8e65d4e56494086d1de78adeedd7, type: 3}
-  storeSprites: []
+  storeSprites:
+  - {fileID: 21300000, guid: f12d6b91d89754d458ad912b067b828c, type: 3}
+  - {fileID: 21300000, guid: 634684255190dfe4cabeddff59a3ea64, type: 3}
+  - {fileID: 21300000, guid: 7927b09615a168541ab38435b30b7c45, type: 3}
+  - {fileID: 21300000, guid: d07db9e8e3da3d44687d0836d70e597a, type: 3}
+  - {fileID: 21300000, guid: 34854bcb97d8e75458d708935d90c907, type: 3}
+  - {fileID: 21300000, guid: 81ebac3f9e78b90468ac2f9e395f2107, type: 3}
   choicePrefab: {fileID: 1796399435}
 --- !u!224 &2018360881
 RectTransform:

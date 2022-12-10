@@ -17,8 +17,20 @@ public enum UpgradeType
     FarmRange,
 }
 
+public enum MerchandiseType
+{
+    UpgradeMap1 = 0,
+    UpgradeMap2,
+    FreeUpgrade,
+    KickbackCard,
+    Hoe,
+    MembershipCard,
+}
+
 public class UpgradeManager : MonoBehaviour
 {
+    private readonly int[] merchandisePrice = {15, 30, 15, 15, 30, 15};
+
     [SerializeField] private WaveManager waveManager;
     [SerializeField] private Character character;
 
@@ -32,7 +44,10 @@ public class UpgradeManager : MonoBehaviour
     private readonly int storeNum = 3;
 
     private List<UpgradeType> upgradeTypes = new();
+    private List<MerchandiseType> merchandiseTypes = new();
     private RectTransform rectTransform;
+
+    private int boughtFieldColumn = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -80,7 +95,7 @@ public class UpgradeManager : MonoBehaviour
             choiceObj.SetActive(true);
             currentChoices.Add(choiceObj);
 
-            RefreshUpgrade(choiceObj.GetComponent<Image>());
+            RefreshSingleUpgrade(choiceObj.GetComponent<Image>());
             CommonButton button = choiceObj.GetComponent<CommonButton>();
             int index = i;
             button.buttonClickAction = () =>
@@ -93,8 +108,8 @@ public class UpgradeManager : MonoBehaviour
 
     private void ShowStore(Action completeAction)
     {
-        upgradeTypes.Clear();
-        for (int i = 0; i < upgradeNum; i++)
+        merchandiseTypes.Clear();
+        for (int i = 0; i < storeNum; i++)
         {
             float gap = (rectTransform.rect.width - choicePrefab.rect.width * upgradeNum) / (upgradeNum + 1);
             Vector3 pos = new Vector3(choicePrefab.position.x + (i + 1) * gap + (i * 2 + 1) * choicePrefab.rect.width / 2,
@@ -104,11 +119,11 @@ public class UpgradeManager : MonoBehaviour
             currentChoices.Add(choiceObj);
 
             int index = i;
-            RefreshUpgrade(choiceObj.GetComponent<Image>());
+            RefreshSingleMerchandise(choiceObj.GetComponent<Image>());
             CommonButton button = choiceObj.GetComponent<CommonButton>();
             button.buttonClickAction = () =>
             {
-                Upgrade(upgradeTypes[index]);
+                Purchase(merchandiseTypes[index]);
                 completeAction?.Invoke();
             };
         }
@@ -151,14 +166,44 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
-    private void RefreshUpgrade(Image image)
+    private void Purchase(MerchandiseType type)
+    {
+        bool succeed = character.TryPurchase(merchandisePrice[(int)type]);
+        if (succeed)
+        {
+            switch (type)
+            {
+                case MerchandiseType.UpgradeMap1:
+                    boughtFieldColumn += 1;
+                    break;
+                case MerchandiseType.UpgradeMap2:
+                    boughtFieldColumn += 2;
+                    break;
+            }
+        }
+    }
+
+    private int GeneratePrice(MerchandiseType type)
+    {
+        int price = merchandisePrice[(int)type];
+        switch (type)
+        {
+            case MerchandiseType.UpgradeMap1:
+            case MerchandiseType.UpgradeMap2:
+                price += boughtFieldColumn * 10;
+                break;
+        }
+        return price;
+    }
+
+    private void RefreshSingleUpgrade(Image image)
     {
         bool found = false;
         int tmpIndex = 0;
         while (!found)
         {
             found = true;
-            tmpIndex = UnityEngine.Random.Range(0, 8);
+            tmpIndex = UnityEngine.Random.Range(0, upgradeSprites.Length);
             foreach (var type in upgradeTypes)
             {
                 if ((int)type == tmpIndex)
@@ -171,5 +216,27 @@ public class UpgradeManager : MonoBehaviour
 
         upgradeTypes.Add((UpgradeType)tmpIndex);
         image.sprite = upgradeSprites[tmpIndex];
+    }
+
+    private void RefreshSingleMerchandise(Image image)
+    {
+        bool found = false;
+        int tmpIndex = 0;
+        while (!found)
+        {
+            found = true;
+            tmpIndex = UnityEngine.Random.Range(0, storeSprites.Length);
+            foreach (var type in merchandiseTypes)
+            {
+                if ((int)type == tmpIndex)
+                {
+                    found = false;
+                    break;
+                }
+            }
+        }
+
+        merchandiseTypes.Add((MerchandiseType)tmpIndex);
+        image.sprite = storeSprites[tmpIndex];
     }
 }

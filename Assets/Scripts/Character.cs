@@ -4,6 +4,7 @@ using UnityEngine;
 using System;
 using TMPro;
 using Newtonsoft.Json.Linq;
+using UnityEngine.TextCore.Text;
 
 public class Character : MonoBehaviour
 {
@@ -19,6 +20,7 @@ public class Character : MonoBehaviour
     public TextMeshProUGUI seedLimitationText;
     public TextMeshProUGUI waterLimitationText;
     public TextMeshProUGUI plantLimitationText;
+    public NumberUIManager coins;
     public Transform farmRange;
 
     private int seedLimitation = 10;
@@ -33,6 +35,7 @@ public class Character : MonoBehaviour
     private int seedAmount = 10;
     private int waterAmount = 10;
     private int plantAmount = 0;
+    private int coinNum = 0;
 
     private Rigidbody2D rBody;
 
@@ -48,6 +51,8 @@ public class Character : MonoBehaviour
         rBody = GetComponent<Rigidbody2D>();
         Vector3 scale = farmRange.localScale;
         originalScale = scale.x;
+        coins.SetColor(NumberColor.Yellow);
+        coins.ShowNumber(coinNum);
     }
 
     void Update()
@@ -126,6 +131,8 @@ public class Character : MonoBehaviour
         seedLimitationText.text = seedLimitation.ToString();
         waterLimitation = 10;
         waterLimitationText.text = waterLimitation.ToString();
+        coinNum = 0;
+        coins.ShowNumber(coinNum);
 
         Vector3 newScale = new(originalScale, originalScale, 0);
         farmRange.localScale = newScale;
@@ -149,6 +156,28 @@ public class Character : MonoBehaviour
         StopAllCoroutines();
         waterRestoring = false;
         seedRestoring = false;
+    }
+
+    public bool SellPlants()
+    {
+        int addNum = StorePlant();
+        coinNum += addNum;
+        coins.ShowNumber(coinNum);
+        return addNum != 0;
+    }
+
+    public bool TryPurchase(int price)
+    {
+        if (coinNum >= price)
+        {
+            coinNum -= price;
+            coins.ShowNumber(coinNum);
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 
     public bool PlantSeed()

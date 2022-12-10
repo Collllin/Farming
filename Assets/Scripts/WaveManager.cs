@@ -18,7 +18,7 @@ public class WaveManager : MonoBehaviour
     public NumberUIManager bigMonthNum;
     public NumberUIManager storedNumText;
     public NumberUIManager goalNumText;
-    public NumberUIManager coins;
+    
     public Sprite[] nums;
 
     [Header("---- Trigger ----")]
@@ -34,8 +34,7 @@ public class WaveManager : MonoBehaviour
     private Vector3 originalPosition;
     private int months = 1;
     private int storedNum = 0;
-    private int coinNum = 0;
-    const double   basicGoalNum = 10;
+    const double basicGoalNum = 10;
     private int goalNum = 20;
     private AudioSource audioSource;
 
@@ -46,8 +45,6 @@ public class WaveManager : MonoBehaviour
 
         bigMonth.SetActive(false);
 
-        coins.SetColor(NumberColor.Yellow);
-        coins.ShowNumber(coinNum);
         monthNum.SetColor(NumberColor.Yellow);
         monthNum.ShowNumber(months);
         bigMonthNum.SetColor(NumberColor.Yellow);
@@ -68,10 +65,7 @@ public class WaveManager : MonoBehaviour
         };
         sellTrigger.interactedAction = () =>
         {
-            int addNum = character.StorePlant();
-            coinNum += addNum;
-            coins.ShowNumber(coinNum);
-            return addNum != 0;
+            return character.SellPlants();
         };
     }
 
@@ -98,25 +92,9 @@ public class WaveManager : MonoBehaviour
         character.ableToMove = true;
         character.Reset();
         cellManager.ResetCells();
-        coinNum = 0;
-        coins.ShowNumber(coinNum);
 
         StartCoroutine(ShowBigMonth());
         StartCoroutine(Countdown());
-    }
-
-    public bool TryPurchase(int price)
-    {
-        if (coinNum >= price)
-        {
-            coinNum -= price;
-            coins.ShowNumber(coinNum);
-            return true;
-        }
-        else
-        {
-            return false;
-        }
     }
 
     public void IncreaseFarmSpeed()
