@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Reflection;
+using System.Diagnostics;
 
 public enum UpgradeType
 {
@@ -96,6 +97,10 @@ public class UpgradeManager : MonoBehaviour
             currentChoices.Add(choiceObj);
 
             RefreshSingleUpgrade(choiceObj.GetComponent<Image>());
+
+            NumberUIManager uiManager = choiceObj.GetComponentInChildren<NumberUIManager>();
+            uiManager.Clear();
+
             CommonButton button = choiceObj.GetComponent<CommonButton>();
             int index = i;
             button.buttonClickAction = () =>
@@ -120,12 +125,19 @@ public class UpgradeManager : MonoBehaviour
 
             int index = i;
             RefreshSingleMerchandise(choiceObj.GetComponent<Image>());
+
+            int price = GeneratePrice(merchandiseTypes[index]);
+            NumberUIManager uiManager = choiceObj.GetComponentInChildren<NumberUIManager>();
+            uiManager.SetColor(NumberColor.Yellow);
+            uiManager.ShowNumber(price);
+
             CommonButton button = choiceObj.GetComponent<CommonButton>();
             button.buttonClickAction = () =>
             {
-                Purchase(merchandiseTypes[index]);
+                Purchase(merchandiseTypes[index], price);
                 completeAction?.Invoke();
             };
+
         }
     }
 
@@ -166,9 +178,9 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
-    private void Purchase(MerchandiseType type)
+    private bool Purchase(MerchandiseType type, int price)
     {
-        bool succeed = character.TryPurchase(merchandisePrice[(int)type]);
+        bool succeed = character.TryPurchase(price);
         if (succeed)
         {
             switch (type)
@@ -181,6 +193,7 @@ public class UpgradeManager : MonoBehaviour
                     break;
             }
         }
+        return succeed;
     }
 
     private int GeneratePrice(MerchandiseType type)
