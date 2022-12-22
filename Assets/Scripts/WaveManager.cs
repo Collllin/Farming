@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using UnityEngine.UI;
+using UnityEditor;
 
 public class WaveManager : MonoBehaviour
 {
@@ -12,7 +13,9 @@ public class WaveManager : MonoBehaviour
     [SerializeField] private CellManager cellManager;
 
     [Header("---- UI ----")]
-    public Image progress;
+    //public Image progress;
+    public int timeLimit = 60;
+    public NumberUIManager timeLimitNum;
     public NumberUIManager monthNum;
     public GameObject bigMonth;
     public NumberUIManager bigMonthNum;
@@ -45,6 +48,8 @@ public class WaveManager : MonoBehaviour
 
         bigMonth.SetActive(false);
 
+        timeLimitNum.SetColor(NumberColor.Red);
+        timeLimitNum.ShowNumber(timeLimit);
         monthNum.SetColor(NumberColor.Yellow);
         monthNum.ShowNumber(months);
         bigMonthNum.SetColor(NumberColor.Yellow);
@@ -75,17 +80,19 @@ public class WaveManager : MonoBehaviour
         if (Input.GetKey(KeyCode.I))
         {
             storedNum = goalNum;
-            progress.fillAmount = 1;
+            timeLimit = 0;
+            //progress.fillAmount = 1;
         }
     }
 
     public void StartGame()
     {
+        timeLimit = 60;
         storedNum = 0;
         storedNumText.ShowNumber(storedNum);
         goalNum = 20;
         goalNumText.ShowNumber(goalNum);
-        progress.fillAmount = 0;
+        //progress.fillAmount = 0;
         months = 1;
         monthNum.ShowNumber(months);
         character.transform.position = originalPosition;
@@ -104,12 +111,17 @@ public class WaveManager : MonoBehaviour
 
     private IEnumerator Countdown()
     {
-        float deltaAmount = 1 / kWaveTime;
-        while (progress.fillAmount < 1)
+        while (timeLimit >= 0)
         {
-            yield return new WaitForEndOfFrame();
-            progress.fillAmount += deltaAmount * Time.deltaTime;
+            yield return new WaitForSeconds(1f);
+            timeLimit--;
+            timeLimitNum.ShowNumber(timeLimit);
         }
+        /*        while (progress.fillAmount < 1)
+                {
+                    yield return new WaitForEndOfFrame();
+                    progress.fillAmount += deltaAmount * Time.deltaTime;
+                }*/
 
         if (storedNum < goalNum)
         {
@@ -139,7 +151,8 @@ public class WaveManager : MonoBehaviour
                 audioSource.clip = backgroundMusic[0];
                 audioSource.Play();
 
-                progress.fillAmount = 0;
+                timeLimit = 60;
+                //progress.fillAmount = 0;
                 StartCoroutine(Countdown());
 
                 character.ableToMove = true;
