@@ -229,8 +229,9 @@ GameObject:
   - component: {fileID: 96342492}
   - component: {fileID: 96342491}
   - component: {fileID: 96342490}
+  - component: {fileID: 96342493}
   m_Layer: 5
-  m_Name: Button (4)
+  m_Name: Start
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -300,7 +301,19 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 96342491}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 875736909}
+        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
+        m_MethodName: SetActive
+        m_Mode: 6
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &96342491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -339,6 +352,21 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 96342488}
   m_CullTransparentMesh: 1
+--- !u!114 &96342493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 96342488}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0ac5031367573be49b09f027c626e38a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  choseHero: 0
+  chosePlant: 0
+  startButton: {fileID: 96342490}
 --- !u!1001 &101396468
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1433,7 +1461,7 @@ GameObject:
   - component: {fileID: 210919196}
   - component: {fileID: 210919195}
   m_Layer: 5
-  m_Name: Image
+  m_Name: ChosenHero
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4680,7 +4708,7 @@ GameObject:
   - component: {fileID: 928097000}
   - component: {fileID: 928096999}
   m_Layer: 5
-  m_Name: Button (1)
+  m_Name: Hero2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -4750,7 +4778,43 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 928097000}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 210919195}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI
+        m_MethodName: set_overrideSprite
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 21300000, guid: 80a4e882165a3b74684f683560217a7c, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Sprite, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1556443332}
+        m_TargetAssemblyTypeName: UnityEngine.SpriteRenderer, UnityEngine
+        m_MethodName: set_sprite
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 21300000, guid: 80a4e882165a3b74684f683560217a7c, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Sprite, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 96342493}
+        m_TargetAssemblyTypeName: ChoosingPage, Assembly-CSharp
+        m_MethodName: ChooseAHero
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &928097000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -7218,7 +7282,7 @@ GameObject:
   - component: {fileID: 1287345415}
   - component: {fileID: 1287345414}
   m_Layer: 5
-  m_Name: Image (1)
+  m_Name: ChosenPlant
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10479,7 +10543,7 @@ GameObject:
   - component: {fileID: 1705491913}
   - component: {fileID: 1705491912}
   m_Layer: 5
-  m_Name: Button (3)
+  m_Name: Plant2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -10563,7 +10627,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.2264151, g: 0.19522962, b: 0.19522962, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -11280,7 +11344,7 @@ GameObject:
   - component: {fileID: 1842754796}
   - component: {fileID: 1842754795}
   m_Layer: 5
-  m_Name: Button (2)
+  m_Name: Plant1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -11350,7 +11414,31 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1842754796}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1287345414}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI
+        m_MethodName: set_overrideSprite
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 21300000, guid: 48b3ca0365169934096af6195e754929, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Sprite, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 96342493}
+        m_TargetAssemblyTypeName: ChoosingPage, Assembly-CSharp
+        m_MethodName: ChooseAPlant
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &1842754796
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12174,7 +12262,7 @@ GameObject:
   - component: {fileID: 2037094296}
   - component: {fileID: 2037094295}
   m_Layer: 5
-  m_Name: Button
+  m_Name: Hero1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -12244,7 +12332,43 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 2037094296}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 210919195}
+        m_TargetAssemblyTypeName: UnityEngine.UI.Image, UnityEngine.UI
+        m_MethodName: set_overrideSprite
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 21300000, guid: 2c76afe560f965944946bf2b82841105, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Sprite, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1556443332}
+        m_TargetAssemblyTypeName: UnityEngine.SpriteRenderer, UnityEngine
+        m_MethodName: set_sprite
+        m_Mode: 2
+        m_Arguments:
+          m_ObjectArgument: {fileID: 21300000, guid: 3f746e9e667870243861a04410d3bb4b, type: 3}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Sprite, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 96342493}
+        m_TargetAssemblyTypeName: ChoosingPage, Assembly-CSharp
+        m_MethodName: ChooseAHero
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
 --- !u!114 &2037094296
 MonoBehaviour:
   m_ObjectHideFlags: 0
