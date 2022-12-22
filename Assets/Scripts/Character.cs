@@ -5,12 +5,16 @@ using System;
 using TMPro;
 using Newtonsoft.Json.Linq;
 using UnityEngine.TextCore.Text;
+using Unity.Mathematics;
+using Random = UnityEngine.Random;
 
 public class Character : MonoBehaviour
 {
     public Action<Transform> characterPosChanged;
 
     public float moveSpeed = 10;
+    public int coinNum = 0;
+
     [HideInInspector]
     public bool ableToMove = false;
 
@@ -35,12 +39,13 @@ public class Character : MonoBehaviour
     private int seedAmount = 10;
     private int waterAmount = 10;
     private int plantAmount = 0;
-    private int coinNum = 0;
 
     private Rigidbody2D rBody;
 
     private float speed;
     private float vspeed;
+    private float criticalRate = 0;
+    private int   criticalAmount = 1;
     private float originalScale;
 
     private bool seedRestoring = false;
@@ -60,6 +65,11 @@ public class Character : MonoBehaviour
         if (Input.GetKey(KeyCode.Escape))
         {
             Application.Quit();
+        }
+        if (Input.GetKey(KeyCode.Equals))
+        {
+            coinNum += 888;
+            coins.ShowNumber(coinNum);
         }
 
         if (!ableToMove)
@@ -248,9 +258,17 @@ public class Character : MonoBehaviour
 
     public bool Harvest()
     {
+        float tempRand = Random.Range(0f,1f);
         if (plantAmount < plantLimitation)
         {
-            plantAmount++;
+            if (tempRand < criticalRate)
+            {
+                plantAmount += 1 + criticalAmount;
+            }
+            else
+            {
+                plantAmount++;
+            }
             plantNum.text = plantAmount.ToString();
             return true;
         }
@@ -311,5 +329,15 @@ public class Character : MonoBehaviour
         Vector3 scale = farmRange.localScale;
         Vector3 newScale = new(scale.x * 1.15f, scale.y * 1.15f, scale.z);
         farmRange.localScale = newScale;
+    }
+
+    public void IncreaseCriticalRate()
+    {
+        criticalRate += 0.05f;
+    }
+
+    public void IncreaseCriticalAmount()
+    {
+        criticalAmount++;
     }
 }

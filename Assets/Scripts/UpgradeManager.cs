@@ -16,6 +16,7 @@ public enum UpgradeType
     SeedRegenTime,
     WaterRegenTime,
     FarmRange,
+    CriticalRate,
 }
 
 public enum MerchandiseType
@@ -39,7 +40,12 @@ public class UpgradeManager : MonoBehaviour
     [SerializeField] private Sprite[] storeSprites;
 
     [SerializeField] private RectTransform choicePrefab;
+    [SerializeField] private GameObject skipButton;
+    [SerializeField] private GameObject refreshButton;
+    [SerializeField] private CommonButton skip;
+    [SerializeField] private CommonButton refresh;
 
+    [SerializeField] private int refreshCost = 5;
     private List<GameObject> currentChoices = new(); 
     private readonly int upgradeNum = 3;
     private readonly int storeNum = 3;
@@ -50,10 +56,10 @@ public class UpgradeManager : MonoBehaviour
 
     private int boughtFieldColumn = 0;
 
-    // Start is called before the first frame update
     void Start()
     {
         gameObject.SetActive(false);
+        skipButton.SetActive(false);
         rectTransform = GetComponent<RectTransform>();
 
         waveManager.startUpgradeAction = (completeAction) =>
@@ -111,8 +117,15 @@ public class UpgradeManager : MonoBehaviour
         }
     }
 
-    private void ShowStore(Action completeAction)
+    public void ShowStore(Action completeAction)
     {
+        skipButton.SetActive(true);
+        skip.buttonClickAction = () =>
+        {
+            refreshButton.SetActive(false);
+            completeAction?.Invoke();
+        };
+        refreshButton.SetActive(true);
         merchandiseTypes.Clear();
         for (int i = 0; i < storeNum; i++)
         {
@@ -135,13 +148,13 @@ public class UpgradeManager : MonoBehaviour
             button.buttonClickAction = () =>
             {
                 Purchase(merchandiseTypes[index], price);
+                refreshButton.SetActive(false);
                 completeAction?.Invoke();
             };
 
         }
     }
 
-    // Update is called once per frame
     void Update()
     {
         
@@ -174,6 +187,9 @@ public class UpgradeManager : MonoBehaviour
                 break;
             case UpgradeType.FarmRange:
                 character.IncreaseFarmRange();
+                break;
+            case UpgradeType.CriticalRate:
+                character.IncreaseCriticalRate();
                 break;
         }
     }
@@ -251,5 +267,15 @@ public class UpgradeManager : MonoBehaviour
 
         merchandiseTypes.Add((MerchandiseType)tmpIndex);
         image.sprite = storeSprites[tmpIndex];
+    }
+
+    public void RefreshStore()
+    {
+        if (character.coinNum >= refreshCost)
+        {
+            character.coinNum -= refreshCost;
+            character.coins.ShowNumber(character.coinNum);
+            refreshCost += 5;
+        }
     }
 }

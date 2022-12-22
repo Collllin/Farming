@@ -7,13 +7,10 @@ using UnityEditor;
 
 public class WaveManager : MonoBehaviour
 {
-    private static readonly float kWaveTime = 60f;
-
     [SerializeField] private Character character;
     [SerializeField] private CellManager cellManager;
 
     [Header("---- UI ----")]
-    //public Image progress;
     public int timeLimit = 60;
     public NumberUIManager timeLimitNum;
     public NumberUIManager monthNum;
@@ -41,7 +38,6 @@ public class WaveManager : MonoBehaviour
     private int goalNum = 20;
     private AudioSource audioSource;
 
-    // Start is called before the first frame update
     void Start()
     {
         audioSource = GetComponent<AudioSource>();
@@ -74,14 +70,12 @@ public class WaveManager : MonoBehaviour
         };
     }
 
-    // Update is called once per frame
     void Update()
     {
         if (Input.GetKey(KeyCode.I))
         {
             storedNum = goalNum;
             timeLimit = 0;
-            //progress.fillAmount = 1;
         }
     }
 
@@ -92,7 +86,6 @@ public class WaveManager : MonoBehaviour
         storedNumText.ShowNumber(storedNum);
         goalNum = 20;
         goalNumText.ShowNumber(goalNum);
-        //progress.fillAmount = 0;
         months = 1;
         monthNum.ShowNumber(months);
         character.transform.position = originalPosition;
@@ -117,12 +110,6 @@ public class WaveManager : MonoBehaviour
             timeLimit--;
             timeLimitNum.ShowNumber(timeLimit);
         }
-        /*        while (progress.fillAmount < 1)
-                {
-                    yield return new WaitForEndOfFrame();
-                    progress.fillAmount += deltaAmount * Time.deltaTime;
-                }*/
-
         if (storedNum < goalNum)
         {
             character.ableToMove = false;
@@ -152,7 +139,6 @@ public class WaveManager : MonoBehaviour
                 audioSource.Play();
 
                 timeLimit = 60;
-                //progress.fillAmount = 0;
                 StartCoroutine(Countdown());
 
                 character.ableToMove = true;
