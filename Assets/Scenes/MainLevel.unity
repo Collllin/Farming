@@ -2747,8 +2747,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 462352182}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.57, y: -1.17, z: 10.067365}
-  m_LocalScale: {x: 2.0095923, y: 2.0095923, z: 2.0095923}
+  m_LocalPosition: {x: 8.8, y: -0.60000014, z: 10.067365}
+  m_LocalScale: {x: 2.0931914, y: 2.0931914, z: 2.0931914}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 1361565408}
@@ -7265,6 +7265,7 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 5a3dbb2bd12a0fa4f84e0558d8ff7595, type: 3}
   - {fileID: 21300000, guid: 807187f440638da4b86cc6e19d1b9579, type: 3}
   - {fileID: 21300000, guid: ee88deec7ad38854dbb854b41fef69f5, type: 3}
+  - {fileID: 21300000, guid: d5479eab69f804f44861f57c0788fd6b, type: 3}
 --- !u!1 &1376378020
 GameObject:
   m_ObjectHideFlags: 0
@@ -11304,6 +11305,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waveManager: {fileID: 293326315}
   character: {fileID: 1556443338}
+  cellManager: {fileID: 1361565409}
   upgradeSprites:
   - {fileID: 21300000, guid: 4d19289eb41074b8e960abfe1b512d02, type: 3}
   - {fileID: 21300000, guid: 520f182e5a0f347a68efeb3fc54f5173, type: 3}

@@ -6,7 +6,6 @@ using TMPro;
 using Newtonsoft.Json.Linq;
 using UnityEngine.TextCore.Text;
 using Unity.Mathematics;
-using Random = UnityEngine.Random;
 
 public class Character : MonoBehaviour
 {
@@ -27,6 +26,8 @@ public class Character : MonoBehaviour
     public NumberUIManager coins;
     public Transform farmRange;
 
+    public float discountAmount = 1;
+
     private int seedLimitation = 10;
     private int waterLimitation = 10;
     private int plantLimitation = 15;
@@ -46,6 +47,7 @@ public class Character : MonoBehaviour
     private float vspeed;
     private float criticalRate = 0;
     private int   criticalAmount = 1;
+    private float kickBackamount = 1;
     private float originalScale;
 
     private bool seedRestoring = false;
@@ -171,16 +173,16 @@ public class Character : MonoBehaviour
     public bool SellPlants()
     {
         int addNum = StorePlant();
-        coinNum += addNum;
+        coinNum += (int)(addNum * kickBackamount);
         coins.ShowNumber(coinNum);
         return addNum != 0;
     }
 
     public bool TryPurchase(int price)
     {
-        if (coinNum >= price)
+        if (coinNum >= (int)(price * discountAmount))
         {
-            coinNum -= price;
+            coinNum -= (int)(price * discountAmount);
             coins.ShowNumber(coinNum);
             return true;
         }
@@ -258,7 +260,7 @@ public class Character : MonoBehaviour
 
     public bool Harvest()
     {
-        float tempRand = Random.Range(0f,1f);
+        float tempRand = UnityEngine.Random.Range(0f,1f);
         if (plantAmount < plantLimitation)
         {
             if (tempRand < criticalRate)
@@ -339,5 +341,15 @@ public class Character : MonoBehaviour
     public void IncreaseCriticalAmount()
     {
         criticalAmount++;
+    }
+
+    public void GetDiscount()
+    {
+        discountAmount -= 0.05f;
+    }
+
+    public void GetKickBack()
+    {
+        kickBackamount += 0.05f;
     }
 }

@@ -21,8 +21,8 @@ public enum UpgradeType
 
 public enum MerchandiseType
 {
-    UpgradeMap1 = 0,
-    UpgradeMap2,
+    ExpandCellSmall = 0,
+    ExpandCellBig,
     FreeUpgrade,
     KickbackCard,
     Hoe,
@@ -35,6 +35,7 @@ public class UpgradeManager : MonoBehaviour
 
     [SerializeField] private WaveManager waveManager;
     [SerializeField] private Character character;
+    [SerializeField] private CellManager cellManager;
 
     [SerializeField] private Sprite[] upgradeSprites;
     [SerializeField] private Sprite[] storeSprites;
@@ -54,6 +55,7 @@ public class UpgradeManager : MonoBehaviour
     private List<MerchandiseType> merchandiseTypes = new();
     private RectTransform rectTransform;
 
+    private bool getFreeUpgrade = false;
     private int boughtFieldColumn = 0;
 
     void Start()
@@ -68,21 +70,12 @@ public class UpgradeManager : MonoBehaviour
 
             ShowUpdate(() =>
             {
-                foreach (var obj in currentChoices)
-                {
-                    Destroy(obj);
-                }
-                currentChoices.Clear();
+                ClearSavedChoices();
 
                 ShowStore(() =>
                 {
+                    ClearSavedChoices();
                     gameObject.SetActive(false);
-
-                    foreach (var obj in currentChoices)
-                    {
-                        Destroy(obj);
-                    }
-                    currentChoices.Clear();
 
                     completeAction?.Invoke();
                 });
@@ -126,6 +119,17 @@ public class UpgradeManager : MonoBehaviour
             completeAction?.Invoke();
         };
         refreshButton.SetActive(true);
+        refresh.buttonClickAction = () =>
+        {
+            if (RefreshStore())
+            {
+                ClearSavedChoices();
+                ShowStore(() =>
+                {
+                    completeAction?.Invoke();
+                });
+            };
+        };
         merchandiseTypes.Clear();
         for (int i = 0; i < storeNum; i++)
         {
@@ -147,9 +151,24 @@ public class UpgradeManager : MonoBehaviour
             CommonButton button = choiceObj.GetComponent<CommonButton>();
             button.buttonClickAction = () =>
             {
-                Purchase(merchandiseTypes[index], price);
-                refreshButton.SetActive(false);
-                completeAction?.Invoke();
+                if (Purchase(merchandiseTypes[index], price))
+                {
+                    refreshButton.SetActive(false);
+                    if (getFreeUpgrade)
+                    {
+                        ClearSavedChoices();
+                        ShowUpdate(() =>
+                        {
+                            ClearSavedChoices();
+                            completeAction?.Invoke();
+                        });
+                        getFreeUpgrade = false;
+                    }
+                    else
+                    {
+                        completeAction?.Invoke();
+                    }
+                }
             };
 
         }
@@ -158,6 +177,15 @@ public class UpgradeManager : MonoBehaviour
     void Update()
     {
         
+    }
+
+    private void ClearSavedChoices()
+    {
+        foreach (var obj in currentChoices)
+        {
+            Destroy(obj);
+        }
+        currentChoices.Clear();
     }
 
     private void Upgrade(UpgradeType type)
@@ -196,29 +224,47 @@ public class UpgradeManager : MonoBehaviour
 
     private bool Purchase(MerchandiseType type, int price)
     {
-        bool succeed = character.TryPurchase(price);
-        if (succeed)
+        if (character.TryPurchase((int)(price * character.discountAmount)))
         {
             switch (type)
             {
-                case MerchandiseType.UpgradeMap1:
+                case MerchandiseType.ExpandCellSmall:
                     boughtFieldColumn += 1;
+                    cellManager.ExpandCell();
                     break;
-                case MerchandiseType.UpgradeMap2:
+                case MerchandiseType.ExpandCellBig:
                     boughtFieldColumn += 2;
+                    cellManager.ExpandCell();
+                    cellManager.ExpandCell();
+                    break;
+                case MerchandiseType.FreeUpgrade:
+                    getFreeUpgrade = true;
+                    break;
+                case MerchandiseType.Hoe:
+                    cellManager.DecreaseHealingTime();
+                    break;
+                case MerchandiseType.KickbackCard:
+                    character.GetKickBack();
+                    break;
+                case MerchandiseType.MembershipCard:
+                    character.GetDiscount();
                     break;
             }
+            return true;
         }
-        return succeed;
+        else
+        {
+            return false;
+        }
     }
 
     private int GeneratePrice(MerchandiseType type)
     {
-        int price = merchandisePrice[(int)type];
+        int price = (int)(merchandisePrice[(int)type] * character.discountAmount);
         switch (type)
         {
-            case MerchandiseType.UpgradeMap1:
-            case MerchandiseType.UpgradeMap2:
+            case MerchandiseType.ExpandCellSmall:
+            case MerchandiseType.ExpandCellBig:
                 price += boughtFieldColumn * 10;
                 break;
         }
@@ -269,13 +315,19 @@ public class UpgradeManager : MonoBehaviour
         image.sprite = storeSprites[tmpIndex];
     }
 
-    public void RefreshStore()
+    public bool RefreshStore()
     {
         if (character.coinNum >= refreshCost)
         {
             character.coinNum -= refreshCost;
             character.coins.ShowNumber(character.coinNum);
             refreshCost += 5;
+
+            return true;
+        }
+        else 
+        {
+            return false;
         }
     }
 }

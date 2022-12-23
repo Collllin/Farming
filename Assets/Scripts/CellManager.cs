@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class CellManager : MonoBehaviour
 {
@@ -11,6 +12,7 @@ public class CellManager : MonoBehaviour
 
     private BasicCell[] allCells;
     private List<BasicCell> activeCells;
+    private int activedCellColumn = 0;
 
     // Start is called before the first frame update
     void Start()
@@ -31,6 +33,7 @@ public class CellManager : MonoBehaviour
             BasicCell[] originalCells = cellColumns[0].GetComponentsInChildren<BasicCell>();
             activeCells = new(originalCells);
             fog.sprite = fogSprites[0];
+            activedCellColumn = 0;
         }
 
         foreach (var cell in activeCells)
@@ -50,6 +53,30 @@ public class CellManager : MonoBehaviour
         foreach (var cell in allCells)
         {
             cell.IncreaseFarmSpeed();
+        }
+    }
+
+    public void DecreaseHealingTime()
+    {
+        foreach (var cell in allCells)
+        {
+            cell.DecreaseHealingTime();
+        }
+    }
+
+    public void ExpandCell()
+    {
+        if (activedCellColumn < cellColumns.Length - 1)
+        {
+            activedCellColumn++;
+
+            BasicCell[] tempActivedCellColumn = cellColumns[activedCellColumn].GetComponentsInChildren<BasicCell>();
+            foreach (var cell in tempActivedCellColumn)
+            {
+                activeCells.Add(cell);
+                cell.SetCellActive(true);
+            }
+            fog.sprite = fogSprites[activedCellColumn];
         }
     }
 }

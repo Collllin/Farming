@@ -26,6 +26,7 @@ public class BasicCell : MonoBehaviour
     private AudioSource audioSource;
     private float farmingSecond = 5f;
     private float infectionSecond = 10f;
+    private float healingSecond = 5f;
 
     private bool active = false;
 
@@ -93,6 +94,11 @@ public class BasicCell : MonoBehaviour
     public void IncreaseFarmSpeed()
     {
         farmingSecond *= 0.9f;
+    }
+
+    public void DecreaseHealingTime()
+    {
+        healingSecond /= 2; 
     }
 
     private void CharacterEnter(Character character)
@@ -198,7 +204,7 @@ public class BasicCell : MonoBehaviour
                 spriteRenderer.sprite = null;
                 audioSource.clip = actionSounds[2];
                 audioSource.Play();
-                StartCoroutine(Countdown(farmingSecond, () =>
+                StartCoroutine(Countdown(healingSecond, () =>
                 {
                     SwitchState();
                 }));
