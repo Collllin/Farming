@@ -25,7 +25,7 @@ public class CellManager : MonoBehaviour
     {
         foreach (var cell in allCells)
         {
-            cell.Reset();
+            cell.Reset(restart);
         }
 
         if (restart)

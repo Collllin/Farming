@@ -66,15 +66,18 @@ public class BasicCell : MonoBehaviour
         }
     }
 
-    public void Reset()
+    public void Reset(bool restart = true)
     {
         StopAllCoroutines();
         cellState = CellState.Empty;
         countingDown = false;
         number.Clear();
         spriteRenderer.sprite = null;
-        farmingSecond = 5;
-        infectionSecond = 10;
+        if (restart)
+        {
+            farmingSecond = 5;
+            infectionSecond = 10;
+        }
         active = false;
     }
 

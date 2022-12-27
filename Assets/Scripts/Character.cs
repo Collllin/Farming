@@ -266,6 +266,11 @@ public class Character : MonoBehaviour
             if (tempRand < criticalRate)
             {
                 plantAmount += 1 + criticalAmount;
+
+                if (plantAmount >= plantLimitation)
+                {
+                    plantAmount = plantLimitation;
+                }
             }
             else
             {
