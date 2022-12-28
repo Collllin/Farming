@@ -21,6 +21,11 @@ public class WaveManager : MonoBehaviour
     
     public Sprite[] nums;
 
+    [Header("---- Refresh ----")]
+    [SerializeField] private int upgradeRefreshCost;
+    [SerializeField] private int storeRefreshCost;
+    const int defaultRefreshCost = 5;
+
     [Header("---- Trigger ----")]
     public CommonInteraction storeTrigger;
     public CommonInteraction sellTrigger;
@@ -88,6 +93,8 @@ public class WaveManager : MonoBehaviour
         goalNumText.ShowNumber(goalNum);
         months = 1;
         monthNum.ShowNumber(months);
+        upgradeRefreshCost = defaultRefreshCost;
+        storeRefreshCost = defaultRefreshCost;
         character.transform.position = originalPosition;
         character.ableToMove = true;
         character.Reset();
@@ -125,6 +132,9 @@ public class WaveManager : MonoBehaviour
             cellManager.ResetCells(false);
             StartUpgrade(() =>
             {
+                upgradeRefreshCost = defaultRefreshCost;
+                storeRefreshCost = defaultRefreshCost;
+
                 months++;
                 monthNum.ShowNumber(months);
 
@@ -160,5 +170,37 @@ public class WaveManager : MonoBehaviour
         bigMonthNum.ShowNumber(months, 130);
         yield return new WaitForSeconds(2);
         bigMonth.SetActive(false);
+    }
+
+    public bool RefreshUpgrade()
+    {
+        if (character.coinNum >= upgradeRefreshCost)
+        {
+            character.coinNum -= upgradeRefreshCost;
+            character.coins.ShowNumber(character.coinNum);
+            upgradeRefreshCost += defaultRefreshCost;
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+
+    public bool RefreshStore()
+    {
+        if (character.coinNum >= storeRefreshCost)
+        {
+            character.coinNum -= storeRefreshCost;
+            character.coins.ShowNumber(character.coinNum);
+            storeRefreshCost += defaultRefreshCost;
+
+            return true;
+        }
+        else
+        {
+            return false;
+        }
     }
 }

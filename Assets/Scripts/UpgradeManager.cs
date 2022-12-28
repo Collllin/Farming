@@ -5,6 +5,7 @@ using UnityEngine.UI;
 using System;
 using System.Reflection;
 using System.Diagnostics;
+using TMPro;
 
 public enum UpgradeType
 {
@@ -42,11 +43,13 @@ public class UpgradeManager : MonoBehaviour
 
     [SerializeField] private RectTransform choicePrefab;
     [SerializeField] private GameObject skipButton;
-    [SerializeField] private GameObject refreshButton;
+    [SerializeField] private GameObject upgradeRefreshButton;
+    [SerializeField] private GameObject storeRefreshButton;
     [SerializeField] private CommonButton skip;
-    [SerializeField] private CommonButton refresh;
+    [SerializeField] private CommonButton upgradeRefresh;
+    [SerializeField] private CommonButton storeRefresh;
 
-    [SerializeField] private int refreshCost = 5;
+
     private List<GameObject> currentChoices = new(); 
     private readonly int upgradeNum = 3;
     private readonly int storeNum = 3;
@@ -86,6 +89,18 @@ public class UpgradeManager : MonoBehaviour
     private void ShowUpdate(Action completeAction)
     {
         upgradeTypes.Clear();
+        upgradeRefreshButton.SetActive(true);
+        upgradeRefresh.buttonClickAction = () =>
+        {
+            if (waveManager.RefreshUpgrade())
+            {
+                ClearSavedChoices();
+                ShowUpdate(() =>
+                {
+                    completeAction?.Invoke();
+                });
+            };
+        };
         for (int i = 0; i < upgradeNum; i++)
         {
             float gap = (rectTransform.rect.width - choicePrefab.rect.width * upgradeNum) / (upgradeNum + 1);
@@ -104,6 +119,7 @@ public class UpgradeManager : MonoBehaviour
             int index = i;
             button.buttonClickAction = () =>
             {
+                upgradeRefreshButton.SetActive(false);
                 Upgrade(upgradeTypes[index]);
                 completeAction?.Invoke();
             };
@@ -112,16 +128,18 @@ public class UpgradeManager : MonoBehaviour
 
     public void ShowStore(Action completeAction)
     {
+        skipButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Skip");
         skipButton.SetActive(true);
         skip.buttonClickAction = () =>
         {
-            refreshButton.SetActive(false);
+            skipButton.SetActive(false);
+            storeRefreshButton.SetActive(false);
             completeAction?.Invoke();
         };
-        refreshButton.SetActive(true);
-        refresh.buttonClickAction = () =>
+        storeRefreshButton.SetActive(true);
+        storeRefresh.buttonClickAction = () =>
         {
-            if (RefreshStore())
+            if (waveManager.RefreshStore())
             {
                 ClearSavedChoices();
                 ShowStore(() =>
@@ -151,22 +169,25 @@ public class UpgradeManager : MonoBehaviour
             CommonButton button = choiceObj.GetComponent<CommonButton>();
             button.buttonClickAction = () =>
             {
+                skipButton.GetComponentInChildren<TextMeshProUGUI>().SetText("Countinue");
+                button.gameObject.SetActive(false);
                 if (Purchase(merchandiseTypes[index], price))
                 {
-                    refreshButton.SetActive(false);
                     if (getFreeUpgrade)
                     {
+                        storeRefreshButton.SetActive(false);
+                        skipButton.SetActive(false);
                         ClearSavedChoices();
                         ShowUpdate(() =>
                         {
                             ClearSavedChoices();
-                            completeAction?.Invoke();
+                            ShowStore(() =>
+                            {
+                                ClearSavedChoices();
+                                completeAction?.Invoke();
+                            });
                         });
                         getFreeUpgrade = false;
-                    }
-                    else
-                    {
-                        completeAction?.Invoke();
                     }
                 }
             };
@@ -313,21 +334,5 @@ public class UpgradeManager : MonoBehaviour
 
         merchandiseTypes.Add((MerchandiseType)tmpIndex);
         image.sprite = storeSprites[tmpIndex];
-    }
-
-    public bool RefreshStore()
-    {
-        if (character.coinNum >= refreshCost)
-        {
-            character.coinNum -= refreshCost;
-            character.coins.ShowNumber(character.coinNum);
-            refreshCost += 5;
-
-            return true;
-        }
-        else 
-        {
-            return false;
-        }
     }
 }
