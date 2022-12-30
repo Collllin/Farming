@@ -20,14 +20,15 @@ public class BasicCell : MonoBehaviour
     [SerializeField] private Sprite[] plantSprites;
     [SerializeField] private AudioClip[] actionSounds;
 
+    public float farmingSecond = 5f;
+    public float infectionSecond = 10f;
+    public float healingSecond = 5f;
+
     private CellState cellState = CellState.Empty;
-    private bool countingDown = false;
     private SpriteRenderer spriteRenderer;
     private AudioSource audioSource;
-    private float farmingSecond = 5f;
-    private float infectionSecond = 10f;
-    private float healingSecond = 5f;
 
+    private bool countingDown = false;
     private bool active = false;
 
     private void Awake()

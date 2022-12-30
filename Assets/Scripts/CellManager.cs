@@ -64,6 +64,21 @@ public class CellManager : MonoBehaviour
         }
     }
 
+    public float GetFarmingTime()
+    {
+        return allCells[0].farmingSecond;
+    }
+
+    public float GetInfectionTime()
+    {
+        return allCells[0].infectionSecond;
+    }
+
+    public float GetHealingTime()
+    {
+        return allCells[0].healingSecond;
+    }
+
     public void ExpandCell()
     {
         if (activedCellColumn < cellColumns.Length - 1)

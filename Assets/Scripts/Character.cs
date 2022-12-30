@@ -11,9 +11,6 @@ public class Character : MonoBehaviour
 {
     public Action<Transform> characterPosChanged;
 
-    public float moveSpeed = 10;
-    public int coinNum = 0;
-
     [HideInInspector]
     public bool ableToMove = false;
 
@@ -26,28 +23,31 @@ public class Character : MonoBehaviour
     public NumberUIManager coins;
     public Transform farmRange;
 
+    public int coinNum = 0;
+
+    [Header("---Show in Pause Menu---")]
+    public float moveSpeed = 10;
+    public int seedRestoreAmount = 1;
+    public int waterRestoreAmount = 1;
+    public float seedRegenerateTime = 0.75f;
+    public float waterRegenerateTime = 0.75f;
+    public float criticalRate = 0;
+    public int criticalAmount = 1;
+    public float kickBackAmount = 1;
     public float discountAmount = 1;
+
+    private Rigidbody2D rBody;
 
     private int seedLimitation = 10;
     private int waterLimitation = 10;
     private int plantLimitation = 15;
 
-    private int   seedRestoreAmount = 1;
-    private int   waterRestoreAmount = 1;
-    private float seedRegenerateTime = 0.75f;
-    private float waterRegenerateTime = 0.75f;
-
     private int seedAmount = 10;
     private int waterAmount = 10;
     private int plantAmount = 0;
 
-    private Rigidbody2D rBody;
-
     private float speed;
     private float vspeed;
-    private float criticalRate = 0;
-    private int   criticalAmount = 1;
-    private float kickBackamount = 1;
     private float originalScale;
 
     private bool seedRestoring = false;
@@ -173,7 +173,7 @@ public class Character : MonoBehaviour
     public bool SellPlants()
     {
         int addNum = StorePlant();
-        coinNum += (int)(addNum * kickBackamount);
+        coinNum += (int)(addNum * kickBackAmount);
         coins.ShowNumber(coinNum);
         return addNum != 0;
     }
@@ -355,6 +355,6 @@ public class Character : MonoBehaviour
 
     public void GetKickBack()
     {
-        kickBackamount += 0.05f;
+        kickBackAmount += 0.05f;
     }
 }
