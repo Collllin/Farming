@@ -312,13 +312,17 @@ public class Character : MonoBehaviour
     public void IncreaseSeedBag()
     {
         seedLimitation += 10;
+        seedAmount = seedLimitation;
         seedLimitationText.text = seedLimitation.ToString();
+        seedNum.text = seedAmount.ToString();
     }
 
     public void IncreaseWaterBag()
     {
         waterLimitation += 10;
+        waterAmount = waterLimitation;
         waterLimitationText.text = waterLimitation.ToString();
+        waterNum.text = waterAmount.ToString();
     }
 
     public void DecreaseSeedRegenTime()
