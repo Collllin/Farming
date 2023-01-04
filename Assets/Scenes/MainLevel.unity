@@ -2295,6 +2295,7 @@ MonoBehaviour:
   bigMonthNum: {fileID: 1992475109}
   storedNumText: {fileID: 960690071}
   goalNumText: {fileID: 554301885}
+  pauseButton: {fileID: 876007430}
   nums:
   - {fileID: 21300000, guid: dec37e4ade6ae45899b8a55938e0c4d5, type: 3}
   - {fileID: 21300000, guid: 1c0b92b8804c545d281f667b3ca2d685, type: 3}

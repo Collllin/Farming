@@ -18,6 +18,7 @@ public class WaveManager : MonoBehaviour
     public NumberUIManager bigMonthNum;
     public NumberUIManager storedNumText;
     public NumberUIManager goalNumText;
+    public GameObject pauseButton;
     
     public Sprite[] nums;
 
@@ -130,6 +131,7 @@ public class WaveManager : MonoBehaviour
             character.ableToMove = false;
             character.ResetAfterMonth();
             cellManager.ResetCells(false);
+            pauseButton.SetActive(false);
             StartUpgrade(() =>
             {
                 upgradeRefreshCost = defaultRefreshCost;
@@ -151,6 +153,7 @@ public class WaveManager : MonoBehaviour
                 timeLimit = 60;
                 StartCoroutine(Countdown());
 
+                pauseButton.SetActive(true);
                 character.ableToMove = true;
             });
         }
