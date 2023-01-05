@@ -7,12 +7,14 @@ public class ChoosingPage : MonoBehaviour
 {
     [SerializeField] bool choseHero = false;
     [SerializeField] bool chosePlant = false;
-    [SerializeField] Button startButton;
+    [SerializeField] GameObject startButton;
+    [SerializeField] Sprite startSprite_Unable;
+    [SerializeField] Sprite startSprite_Enable;
     
     void Start()
     {
-        startButton = GetComponent<Button>();
-        startButton.enabled = false;
+        startButton.GetComponent<Image>().sprite = startSprite_Unable;
+        startButton.GetComponent<CommonButton>().interactable = false;
         choseHero = false;
         chosePlant = false;
     }
@@ -31,7 +33,8 @@ public class ChoosingPage : MonoBehaviour
     {
         if (choseHero && chosePlant)
         {
-            startButton.enabled = true;
+            startButton.GetComponent<CommonButton>().interactable = true;
+            startButton.GetComponent<Image>().sprite = startSprite_Enable;
         }
     }
 }
